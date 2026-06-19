@@ -203,6 +203,10 @@
         </ul>
       </div>
       <div class="card">
+        <h2>Also exploring</h2>
+        <p style="font-size:.84rem">See <strong>∞ Worlds</strong> tab for Split Fiction–style multiverse links between biomes. See <strong>$ Pay</strong> for AI credits &amp; physical collectibles (optional, not pay-to-win).</p>
+      </div>
+      <div class="card">
         <h2>Core Pillars Balance</h2>
         <p class="decision-label">How much should each pillar dominate v1? <span class="req">tap to rank</span></p>
         <div id="pillar-balance"></div>
@@ -584,6 +588,102 @@
         <div id="decision-narrative-style"></div>
         <p class="comment-label">General theme / story notes</p>
         <textarea data-note="theme-general" placeholder="How serious? Humor ok? Romance? Player character identity…"></textarea>
+      </div>
+    </section>
+
+    <!-- CONNECTED WORLDS (Split Fiction-style) -->
+    <section class="panel" id="panel-worlds">
+      <div class="card">
+        <h2>Connected Worlds (explore)</h2>
+        <p><strong>Inspired by Split Fiction:</strong> distinct worlds (industrial ruin, crystal cavern, synthwave grid, pastoral hills…) that can stay separate <em>or</em> bleed together into one meta-campaign. Co-op is the glue — asymmetric perspectives, shared puzzles, reality shifts mid-run.</p>
+        <p style="margin-top:8px;font-size:.82rem;color:var(--muted)">Not required for v1. This tab is for exploring whether all your art themes and biomes live in one multiverse.</p>
+      </div>
+
+      <div class="card">
+        <h2>What Split Fiction does (reference)</h2>
+        <ul>
+          <li>Two players, two genres — sci-fi vs fantasy — that <strong>merge and swap</strong> mid-chapter</li>
+          <li>Mechanics from one world solve puzzles in another (gravity in one, magic in other)</li>
+          <li>Story payoff: the connection was the point all along</li>
+          <li>Requires tight co-op — neither player has the full picture alone</li>
+        </ul>
+        <div class="story">
+          <em>Expedition Protocol translation</em>
+          Your biomes aren't just map skins — they're <strong>realities on the same relay network</strong>. Industrial, crystal, overgrown, carnival, cosmic… each is a frequency the outpost can tune into. Campaign nights could <strong>stitch two themes in one run</strong>: enter through a factory bulkhead, exit into a stained-glass cathedral. Co-op roles split perception — Tech sees glitch overlay, Support sees pastoral calm, same room.
+        </div>
+        <p class="decision-label">Connected worlds interest</p>
+        <div id="decision-worlds-interest"></div>
+        <p class="comment-label">Gut reaction to multiverse / Split Fiction angle</p>
+        <textarea data-note="worlds-general" placeholder="Love the genre mashup, worried about art scope, want it lore-only at first…"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Design thoughts</h2>
+        <ul style="font-size:.85rem;line-height:1.55;padding-left:1.2rem;margin:0">
+          <li><strong>Hub as nexus:</strong> Outpost sits <em>between</em> worlds — each module door opens to a different reality. Threat meter is cross-world bleed.</li>
+          <li><strong>Run stitching:</strong> Mid-expedition portal room swaps art pack + puzzle rules (factory valves → carnival rigged games).</li>
+          <li><strong>Asymmetric co-op:</strong> Each player sees a different theme overlay on the same geometry (Split Fiction parity). Requires strong comms UI.</li>
+          <li><strong>Campaign acts:</strong> Act 1 = one biome pure. Act 2 = two bleed. Act 3 = boss spans all unlocked themes.</li>
+          <li><strong>Lore spine:</strong> "The Relay" — one broken translation layer; every biome is a misread signal from the same source.</li>
+          <li><strong>AI tie-in:</strong> Generated micro-biomes plug into the multiverse as new frequencies — credits unlock new world links.</li>
+          <li><strong>Scope guard:</strong> v1 = one biome. Multiverse is meta roadmap, not launch blocker.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Connection models — plan variants</h2>
+        <table>
+          <tr><th>Option</th><th>How worlds connect</th><th>Co-op hook</th></tr>
+          <tr><td>A — Relay frequencies</td><td>Hub tuner picks biome; threat opens bleed routes</td><td>Vote which world to deploy into</td></tr>
+          <tr><td>B — Split Fiction bleed</td><td>Mid-run reality swap; mechanics carry over</td><td>Asymmetric info across themes</td></tr>
+          <tr><td>C — Dual perception</td><td>Same room, two art/mechanic overlays per player</td><td>Describe what you see; partner acts</td></tr>
+          <tr><td>D — Campaign acts</td><td>Each act is one world; finale merges all</td><td>Long-session narrative arc</td></tr>
+          <tr><td>E — Nexus hub doors</td><td>Physical hub layout = multiverse map</td><td>Upgrade doors to unlock worlds</td></tr>
+          <tr><td>F — Simulation stack</td><td>All worlds are layers of one failing sim</td><td>Glitch rooms peel layers</td></tr>
+          <tr><td>G — Loose anthology</td><td>Worlds unrelated; connect only in endgame codex</td><td>Low scope; optional lore</td></tr>
+        </table>
+        <p class="decision-label">Preferred connection model (pick up to 2)</p>
+        <div id="decision-worlds-model"></div>
+        <p class="decision-label">When do worlds start connecting?</p>
+        <div id="decision-worlds-timing"></div>
+        <p class="decision-label">Co-op multiverse mechanic</p>
+        <div id="decision-worlds-coop"></div>
+      </div>
+
+      <div class="card">
+        <h2>Example story arc — all worlds one campaign</h2>
+        <div class="story">
+          <em>Act 1 — Single frequency</em>
+          Industrial ruin only. Crew learns extract loop. Hub module 1 online.<br><br>
+          <em>Act 2 — Bleed event</em>
+          Crystal readings appear inside factory rooms. Watcher theme: something is translating signals wrong. First split puzzle: Tech on glitch UI, Support on crystal harmonics.<br><br>
+          <em>Act 3 — Carnival intrusion</em>
+          Debt collectors arrive as uncanny carnival contractors. Overgrown samples sprout in hub. Deploy into stitched run: 3 rooms industrial → portal → 3 rooms carnival.<br><br>
+          <em>Act 4 — Relay core</em>
+          Final expedition hits the relay itself — geometry shifts every boss phase (synthwave → pastoral → cosmic). Victory unlocks hub nexus: tune any frequency for future sorties.
+        </div>
+        <p class="comment-label">Your campaign arc ideas / which biomes merge when</p>
+        <textarea data-note="worlds-arc" placeholder="e.g. pastoral only as hub respite, cosmic only for final boss…"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>World link map (sketch)</h2>
+        <div class="flow">        [ COSMIC ]────bleed────[ SYNTHWAVE ]
+              \                    /
+           glitch              carnival
+                \              /
+    [ INDUSTRIAL ]───RELAY───[ CRYSTAL ]
+                /              \
+           overgrown         pastoral
+                /              \
+        [ SURVIVAL NOIR ]───[ HUB NEXUS ]</div>
+        <p class="comment-label">Which worlds should link to which? Any always separate?</p>
+        <textarea data-note="worlds-map" placeholder="Draw or describe links…"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Questions to decide</h2>
+        <div id="worlds-questions"></div>
       </div>
     </section>
 
@@ -1135,6 +1235,7 @@
     <button data-tab="art"><span class="icon">🎨</span>Art</button>
     <button data-tab="lore"><span class="icon">📖</span>Lore</button>
     <button data-tab="theme"><span class="icon">✦</span>Theme</button>
+    <button data-tab="worlds"><span class="icon">∞</span>Worlds</button>
     <button data-tab="progression"><span class="icon">⬡</span>RPG</button>
     <button data-tab="monetize"><span class="icon">$</span>Pay</button>
     <button data-tab="rooms"><span class="icon">▣</span>Rooms</button>
@@ -1580,6 +1681,53 @@
           { id: 'f-bundle', title: 'F — Premium launch box', desc: 'Game + totem + art book' },
         ],
       },
+      'worlds-interest': {
+        label: 'Connected worlds interest',
+        type: 'single',
+        options: [
+          { id: 'core', title: 'Core narrative hook', desc: 'Multiverse is the main story sell' },
+          { id: 'campaign', title: 'Campaign-only', desc: 'Sorties single-world; campaigns stitch' },
+          { id: 'explore', title: 'Explore for now', desc: 'Document ideas, decide later' },
+          { id: 'lore-only', title: 'Lore flavor only', desc: 'Codex links; gameplay stays single biome' },
+          { id: 'skip', title: 'Skip multiverse', desc: 'Each biome is standalone' },
+        ],
+      },
+      'worlds-model': {
+        label: 'Connection model',
+        type: 'multi',
+        max: 2,
+        options: [
+          { id: 'a-relay', title: 'A — Relay frequencies', desc: 'Hub tunes between realities' },
+          { id: 'b-bleed', title: 'B — Split Fiction bleed', desc: 'Mid-run world swaps' },
+          { id: 'c-dual', title: 'C — Dual perception', desc: 'Two overlays, one room' },
+          { id: 'd-acts', title: 'D — Campaign acts', desc: 'Act per world, merge finale' },
+          { id: 'e-nexus', title: 'E — Nexus hub doors', desc: 'Hub map = multiverse' },
+          { id: 'f-sim', title: 'F — Simulation stack', desc: 'Layers of one broken sim' },
+          { id: 'g-loose', title: 'G — Loose anthology', desc: 'Optional endgame codex only' },
+        ],
+      },
+      'worlds-timing': {
+        label: 'When worlds connect',
+        type: 'single',
+        options: [
+          { id: 'launch', title: 'From launch', desc: 'Two themes in v1' },
+          { id: 'act2', title: 'After first biome proven', desc: 'Second world in major update' },
+          { id: 'campaign', title: 'Campaign mode only', desc: 'Sorties stay single-world' },
+          { id: 'endgame', title: 'Endgame reveal', desc: 'Connection is late spoiler' },
+          { id: 'never-v1', title: 'Not in v1', desc: 'Roadmap only' },
+        ],
+      },
+      'worlds-coop': {
+        label: 'Co-op multiverse mechanic',
+        type: 'single',
+        options: [
+          { id: 'asymmetric', title: 'Asymmetric perception', desc: 'Each player sees different theme' },
+          { id: 'vote', title: 'Party vote on frequency', desc: 'Democratic world pick' },
+          { id: 'host-tune', title: 'Host tunes relay', desc: 'Host picks world / bleed' },
+          { id: 'role-tied', title: 'Class-tied perception', desc: 'Tech=glitch, Support=pastoral, etc.' },
+          { id: 'shared', title: 'Shared reality only', desc: 'Everyone sees same swap' },
+        ],
+      },
     };
 
     const MONETIZE_QUESTIONS = [
@@ -1607,6 +1755,18 @@
       { id: 'pq-lore', text: 'Lore name for physical objects — totem, idol, operator shell, something else?' },
       { id: 'pq-ai', text: 'Combine with AI? (e.g. scan craft → AI refines mesh for in-game use)' },
       { id: 'pq-v1', text: 'Include any physical tie-in in v1, or only after Steam launch proves demand?' },
+    ];
+
+    const WORLDS_QUESTIONS = [
+      { id: 'wq-split', text: 'How close to Split Fiction — full genre swap mid-chapter, or subtle bleed only?' },
+      { id: 'wq-count', text: 'How many distinct worlds in a full campaign? (3, 5, all art themes?)' },
+      { id: 'wq-art', text: 'Can you afford multiple art packs in one run, or shader-swap + palette only?' },
+      { id: 'wq-puzzle', text: 'Cross-world puzzles: required for campaign, or optional secret rooms?' },
+      { id: 'wq-ai', text: 'Do AI-generated biomes auto-plug into the multiverse as new relay frequencies?' },
+      { id: 'wq-threat', text: 'Does threat meter track one world or cross-world bleed level?' },
+      { id: 'wq-solo', text: 'If solo ever exists, how handle asymmetric perception mechanics?' },
+      { id: 'wq-name', text: 'Meta name for the connective tissue — The Relay, The Stack, The Translation, other?' },
+      { id: 'wq-v1', text: 'Minimum multiverse in v1 if any? (none / lore text / 2-theme sortie)' },
     ];
 
     const MONETIZE_ETHICS = [
@@ -1656,10 +1816,11 @@
           const parsed = JSON.parse(raw);
           if (!parsed.monetize) parsed.monetize = {};
           if (!parsed.physical) parsed.physical = {};
+          if (!parsed.worlds) parsed.worlds = {};
           return parsed;
         }
       } catch (e) {}
-      return { decisions: {}, notes: {}, checks: {}, open: {}, scope: {}, monetize: {}, physical: {} };
+      return { decisions: {}, notes: {}, checks: {}, open: {}, scope: {}, monetize: {}, physical: {}, worlds: {} };
     }
 
     function saveState() {
@@ -1752,6 +1913,10 @@
           'physical-model': 'decision-physical-model',
           'physical-gameplay': 'decision-physical-gameplay',
           'physical-variant': 'decision-physical-variant',
+          'worlds-interest': 'decision-worlds-interest',
+          'worlds-model': 'decision-worlds-model',
+          'worlds-timing': 'decision-worlds-timing',
+          'worlds-coop': 'decision-worlds-coop',
           lore: 'decision-lore',
           theme: 'decision-theme',
           'narrative-style': 'decision-narrative-style',
@@ -1819,6 +1984,9 @@
       'monetize-general': 'Monetization — general notes',
       'monetize-physical': 'Monetization — physical collectibles',
       'monetize-physical-logistics': 'Monetization — physical logistics & pricing',
+      'worlds-general': 'Connected worlds — general thoughts',
+      'worlds-arc': 'Connected worlds — campaign arc',
+      'worlds-map': 'Connected worlds — link map',
       'lore-indentured': 'Lore A — Indentured Extractors',
       'lore-relay': 'Lore B — Last Relay Chain',
       'lore-bloom': 'Lore C — Bloom That Remembers',
@@ -1887,6 +2055,10 @@
         `- **Physical pipeline:** ${labelFor('physical-model', d['physical-model'])}`,
         `- **Physical in-game role:** ${labelFor('physical-gameplay', d['physical-gameplay'])}`,
         `- **Physical plan variants:** ${(d['physical-variant'] || []).map(x => labelFor('physical-variant', x)).join(', ') || '—'}`,
+        `- **Connected worlds interest:** ${labelFor('worlds-interest', d['worlds-interest'])}`,
+        `- **World connection model:** ${(d['worlds-model'] || []).map(x => labelFor('worlds-model', x)).join(', ') || '—'}`,
+        `- **Worlds connect when:** ${labelFor('worlds-timing', d['worlds-timing'])}`,
+        `- **Co-op multiverse:** ${labelFor('worlds-coop', d['worlds-coop'])}`,
         '',
         '## Your comments & notes',
       ];
@@ -1905,6 +2077,10 @@
       lines.push('', '## Physical collectibles questions');
       PHYSICAL_QUESTIONS.forEach(q => {
         if (state.physical?.[q.id]?.trim()) lines.push(`- **${q.text}**`, `  ${state.physical[q.id].trim()}`);
+      });
+      lines.push('', '## Connected worlds questions');
+      WORLDS_QUESTIONS.forEach(q => {
+        if (state.worlds?.[q.id]?.trim()) lines.push(`- **${q.text}**`, `  ${state.worlds[q.id].trim()}`);
       });
       lines.push('## Open questions answered');
       OPEN_QUESTIONS.forEach(q => {
@@ -1991,6 +2167,21 @@
       });
     }
 
+    const wqEl = document.getElementById('worlds-questions');
+    if (wqEl) {
+      wqEl.innerHTML = WORLDS_QUESTIONS.map(q => `
+        <p style="font-size:.82rem;margin:12px 0 4px;font-weight:600">${q.text}</p>
+        <input type="text" data-worlds="${q.id}" placeholder="Your answer…" value="${state.worlds?.[q.id] || ''}" />
+      `).join('');
+      wqEl.querySelectorAll('[data-worlds]').forEach(inp => {
+        inp.addEventListener('input', () => {
+          if (!state.worlds) state.worlds = {};
+          state.worlds[inp.dataset.worlds] = inp.value;
+          saveState();
+        });
+      });
+    }
+
     renderChecks(V1_SCOPE, 'v1-scope', 'scope');
     renderChecks(ART_CHECKLIST, 'art-checklist', 'checks');
     renderChecks(MONETIZE_ETHICS, 'monetize-ethics', 'checks');
@@ -2024,7 +2215,7 @@
 
     document.getElementById('btn-reset').addEventListener('click', () => {
       if (confirm('Clear all decisions and notes?')) {
-        state = { decisions: {}, notes: {}, checks: {}, open: {}, scope: {}, monetize: {}, physical: {} };
+        state = { decisions: {}, notes: {}, checks: {}, open: {}, scope: {}, monetize: {}, physical: {}, worlds: {} };
         localStorage.removeItem(STORAGE_KEY);
         localStorage.removeItem('expedition-protocol-planner-v1');
         saveState();
