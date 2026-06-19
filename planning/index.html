@@ -39,8 +39,15 @@
     }
     header h1 { font-size: 1.05rem; font-weight: 700; }
     header p { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+    .xp-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 8px; font-size: .72rem;
+    }
+    .xp-rank { font-weight: 700; color: var(--green); }
+    .xp-points { color: var(--muted); font-variant-numeric: tabular-nums; }
+    .xp-hint { font-size: .68rem; color: var(--muted); margin-top: 4px; min-height: 1em; }
     .progress-wrap {
-      margin-top: 10px; height: 4px; background: var(--surface2); border-radius: 99px; overflow: hidden;
+      margin-top: 6px; height: 6px; background: var(--surface2); border-radius: 99px; overflow: hidden;
     }
     .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; transition: width .3s; }
     main { padding: 12px 14px 24px; max-width: 720px; margin: 0 auto; }
@@ -164,7 +171,12 @@
   <header>
     <h1>Expedition Protocol</h1>
     <p>Design planner · review on phone · export back to Cursor</p>
+    <div class="xp-row">
+      <span class="xp-rank" id="xp-rank">Recruit</span>
+      <span class="xp-points" id="xp-points">0 XP</span>
+    </div>
     <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+    <p class="xp-hint" id="xp-hint">Tap any option to earn XP</p>
   </header>
 
   <main>
@@ -1809,6 +1821,52 @@
     ];
 
     let state = loadState();
+    let lastXP = 0;
+
+    const GAMIFY = { decision: 10, note: 15, noteMin: 12, check: 5, question: 8 };
+
+    const RANKS = [
+      { min: 0, title: 'Recruit', hint: 'Tap any option to start earning XP' },
+      { min: 50, title: 'Scout', hint: 'Browse Art — comment on a concept you like' },
+      { min: 120, title: 'Operator', hint: 'Pick lore, theme, and a first biome' },
+      { min: 220, title: 'Veteran', hint: 'Try Worlds, Pay, and RPG tabs' },
+      { min: 350, title: 'Architect', hint: 'Answer open questions & checklists' },
+      { min: 500, title: 'Expedition Lead', hint: 'Almost there — export your decisions!' },
+    ];
+
+    function computeXP() {
+      let xp = 0;
+      Object.values(state.decisions || {}).forEach(v => {
+        if (!v) return;
+        if (Array.isArray(v)) { if (v.length) xp += GAMIFY.decision; }
+        else xp += GAMIFY.decision;
+      });
+      Object.values(state.notes || {}).forEach(n => {
+        if (n && n.trim().length >= GAMIFY.noteMin) xp += GAMIFY.note;
+      });
+      ['checks', 'scope'].forEach(key => {
+        Object.values(state[key] || {}).forEach(c => { if (c) xp += GAMIFY.check; });
+      });
+      ['open', 'monetize', 'physical', 'worlds'].forEach(key => {
+        Object.values(state[key] || {}).forEach(q => {
+          if (q && q.trim().length >= 3) xp += GAMIFY.question;
+        });
+      });
+      return xp;
+    }
+
+    function computeMaxXP() {
+      return Object.keys(DECISIONS).length * GAMIFY.decision
+        + document.querySelectorAll('[data-note]').length * GAMIFY.note
+        + (V1_SCOPE.length + ART_CHECKLIST.length + MONETIZE_ETHICS.length) * GAMIFY.check
+        + (OPEN_QUESTIONS.length + MONETIZE_QUESTIONS.length + PHYSICAL_QUESTIONS.length + WORLDS_QUESTIONS.length) * GAMIFY.question;
+    }
+
+    function getRank(xp) {
+      let rank = RANKS[0];
+      for (const r of RANKS) if (xp >= r.min) rank = r;
+      return rank;
+    }
 
     function loadState() {
       try {
@@ -1826,10 +1884,11 @@
     }
 
     function saveState() {
+      const prevXp = lastXP;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      updateProgress();
+      const newXp = updateProgress();
       refreshExport();
-      showToast('Saved');
+      if (newXp > prevXp) showToast(`+${newXp - prevXp} XP`);
     }
 
     function renderDecision(id, containerId) {
@@ -1944,16 +2003,18 @@
     }
 
     function updateProgress() {
-      const required = ['biome', 'combat', 'hub', 'art-style', 'lore', 'theme', 'deck', 'rpg-depth'];
-      const done = required.filter(k => state.decisions[k]).length;
-      const optional = Object.keys(DECISIONS).length;
-      const filled = Object.keys(state.decisions).filter(k => {
-        const v = state.decisions[k];
-        return v && (Array.isArray(v) ? v.length : true);
-      }).length;
-      const notes = Object.values(state.notes).filter(n => n && n.trim()).length;
-      const pct = Math.min(100, Math.round(((done / required.length) * 45) + (filled / optional) * 35 + Math.min(notes, 8) * 2.5));
+      const xp = computeXP();
+      const maxXp = computeMaxXP();
+      const pct = maxXp ? Math.min(100, Math.round((xp / maxXp) * 100)) : 0;
+      const rank = getRank(xp);
       document.getElementById('progress-bar').style.width = pct + '%';
+      document.getElementById('xp-points').textContent = `${xp} / ${maxXp} XP`;
+      document.getElementById('xp-rank').textContent = rank.title;
+      const hintEl = document.getElementById('xp-hint');
+      if (pct >= 100) hintEl.textContent = 'Briefing complete — export when ready!';
+      else hintEl.textContent = rank.hint;
+      lastXP = xp;
+      return xp;
     }
 
     const NOTE_LABELS = {
