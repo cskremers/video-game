@@ -75,6 +75,8 @@
       color: var(--text);
       cursor: pointer;
       transition: border-color .15s, background .15s;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
     .option.selected { border-color: var(--accent); background: #1a2540; }
     .option-title { font-weight: 600; font-size: .88rem; display: block; margin-bottom: 4px; }
@@ -1856,25 +1858,29 @@
     }
 
     function bindDecisions() {
-      document.querySelectorAll('[data-decision]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.dataset.decision;
-          const opt = btn.dataset.option;
-          const def = DECISIONS[id];
-          if (def.type === 'multi') {
-            let arr = state.decisions[id] || [];
-            if (arr.includes(opt)) arr = arr.filter(x => x !== opt);
-            else {
-              if (def.max && arr.length >= def.max) arr = arr.slice(1);
-              arr = [...arr, opt];
-            }
-            state.decisions[id] = arr;
-          } else {
-            state.decisions[id] = state.decisions[id] === opt ? null : opt;
+      if (bindDecisions._bound) return;
+      bindDecisions._bound = true;
+      // Delegated so listeners survive renderAllDecisions() innerHTML refresh.
+      document.querySelector('main').addEventListener('click', e => {
+        const btn = e.target.closest('button[data-decision]');
+        if (!btn) return;
+        const id = btn.dataset.decision;
+        const opt = btn.dataset.option;
+        const def = DECISIONS[id];
+        if (!def) return;
+        if (def.type === 'multi') {
+          let arr = state.decisions[id] || [];
+          if (arr.includes(opt)) arr = arr.filter(x => x !== opt);
+          else {
+            if (def.max && arr.length >= def.max) arr = arr.slice(1);
+            arr = [...arr, opt];
           }
-          saveState();
-          renderAllDecisions();
-        });
+          state.decisions[id] = arr;
+        } else {
+          state.decisions[id] = state.decisions[id] === opt ? null : opt;
+        }
+        saveState();
+        renderAllDecisions();
       });
     }
 
