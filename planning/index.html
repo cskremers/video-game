@@ -26,6 +26,7 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--bg);
+      background-image: radial-gradient(ellipse 120% 80% at 50% -20%, rgba(91, 140, 255, .08), transparent);
       color: var(--text);
       line-height: 1.5;
       padding-bottom: calc(72px + var(--safe-bottom));
@@ -43,16 +44,39 @@
       display: flex; justify-content: space-between; align-items: center;
       margin-top: 8px; font-size: .72rem;
     }
-    .xp-rank { font-weight: 700; color: var(--green); }
+    .xp-rank { font-weight: 700; color: var(--green); transition: transform .25s; }
+    .xp-rank.bump { animation: rankBump .45s ease; }
+    @keyframes rankBump { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
     .xp-points { color: var(--muted); font-variant-numeric: tabular-nums; }
-    .xp-hint { font-size: .68rem; color: var(--muted); margin-top: 4px; min-height: 1em; }
+    .xp-hint { font-size: .68rem; color: var(--muted); margin-top: 4px; min-height: 1em; transition: color .2s; }
     .progress-wrap {
       margin-top: 6px; height: 6px; background: var(--surface2); border-radius: 99px; overflow: hidden;
     }
-    .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; transition: width .3s; }
+    .progress-bar {
+      height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
+      width: 0%; transition: width .45s cubic-bezier(.22, 1, .36, 1); position: relative;
+    }
+    .progress-bar.gain::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+      animation: shimmer .6s ease;
+    }
+    @keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
     main { padding: 12px 14px 24px; max-width: 720px; margin: 0 auto; }
     .panel { display: none; }
-    .panel.active { display: block; }
+    .panel.active { display: block; animation: panelIn .2s ease; }
+    @keyframes panelIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      .panel.active, .xp-rank.bump, .progress-bar.gain::after, .option.pop { animation: none !important; }
+      .progress-bar { transition: width .15s; }
+    }
+    .mission-card {
+      border-color: #3a5080;
+      background: linear-gradient(135deg, #171a24 0%, #1a2238 100%);
+    }
+    .mission-card p { margin: 0; }
+    .mission-next { font-size: .88rem; color: var(--text); font-weight: 600; margin-top: 4px !important; }
+    .mission-meta { font-size: .72rem; color: var(--muted); margin-top: 6px; }
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -77,15 +101,32 @@
       background: var(--surface2);
       border: 2px solid var(--border);
       border-radius: 12px;
-      padding: 12px 14px;
+      padding: 12px 14px 12px 36px;
       margin-bottom: 8px;
       color: var(--text);
       cursor: pointer;
-      transition: border-color .15s, background .15s;
+      transition: border-color .15s, background .15s, transform .12s;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
+      position: relative;
     }
-    .option.selected { border-color: var(--accent); background: #1a2540; }
+    .option:active { transform: scale(.985); }
+    .option.pop { animation: optPop .25s ease; }
+    @keyframes optPop { 0% { transform: scale(.97); } 60% { transform: scale(1.01); } 100% { transform: scale(1); } }
+    .option.selected {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, #1a2540 0%, #1e2a48 100%);
+      box-shadow: 0 0 0 1px rgba(91, 140, 255, .25);
+    }
+    .option-check {
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      width: 18px; height: 18px; border-radius: 99px; border: 2px solid var(--border);
+      font-size: .65rem; line-height: 14px; text-align: center; color: transparent;
+      transition: all .15s;
+    }
+    .option.selected .option-check {
+      border-color: var(--green); background: var(--green); color: #0a1a12; font-weight: 700;
+    }
     .option-title { font-weight: 600; font-size: .88rem; display: block; margin-bottom: 4px; }
     .option-desc { font-size: .78rem; color: var(--muted); display: block; }
     .decision-label {
@@ -117,6 +158,16 @@
     }
     nav.bottom button.active { color: var(--accent); }
     nav.bottom button span.icon { font-size: 1.1rem; line-height: 1; }
+    nav.bottom button { position: relative; }
+    .tab-dot {
+      position: absolute; top: 2px; right: calc(50% - 18px);
+      width: 6px; height: 6px; border-radius: 99px;
+      background: var(--border); transition: background .2s, transform .2s;
+    }
+    .tab-dot.partial { background: var(--amber); }
+    .tab-dot.done { background: var(--green); transform: scale(1.1); }
+    nav.bottom button.active .tab-dot.partial,
+    nav.bottom button.active .tab-dot.done { box-shadow: 0 0 6px currentColor; }
     .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
     .btn {
       flex: 1; min-width: 120px;
@@ -127,11 +178,14 @@
     .btn.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
     .btn:active { opacity: .85; }
     .toast {
-      position: fixed; bottom: calc(80px + var(--safe-bottom)); left: 50%; transform: translateX(-50%);
+      position: fixed; bottom: calc(80px + var(--safe-bottom)); left: 50%; transform: translateX(-50%) translateY(8px);
       background: var(--green); color: #0a1a12; padding: 10px 18px; border-radius: 99px;
-      font-size: .82rem; font-weight: 600; opacity: 0; transition: opacity .25s; pointer-events: none; z-index: 50;
+      font-size: .82rem; font-weight: 600; opacity: 0; transition: opacity .25s, transform .25s;
+      pointer-events: none; z-index: 50; white-space: nowrap;
     }
-    .toast.show { opacity: 1; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.rank { background: linear-gradient(135deg, var(--amber), #ffd080); color: #2a1800; }
+    .toast.complete { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
     #export-output {
       width: 100%; min-height: 280px; font-family: ui-monospace, monospace;
       font-size: .72rem; line-height: 1.45; margin-top: 10px;
@@ -219,6 +273,11 @@
       <div class="card">
         <h2>Also exploring</h2>
         <p style="font-size:.84rem">See <strong>∞ Worlds</strong> tab for Split Fiction–style multiverse links between biomes. See <strong>$ Pay</strong> for AI credits &amp; physical collectibles (optional, not pay-to-win).</p>
+      </div>
+      <div class="card mission-card" id="mission-card">
+        <h2>Your briefing</h2>
+        <p class="mission-next" id="mission-next">Tap any option to begin.</p>
+        <p class="mission-meta" id="mission-meta">0 tabs started · export when the bar fills</p>
       </div>
       <div class="card">
         <h2>Core Pillars Balance</h2>
@@ -1231,6 +1290,11 @@
 
     <!-- EXPORT -->
     <section class="panel" id="panel-export">
+      <div class="card mission-card" id="export-debrief">
+        <h2>Mission debrief</h2>
+        <p class="mission-next" id="debrief-status">Complete your briefing to export.</p>
+        <p class="mission-meta" id="debrief-meta">—</p>
+      </div>
       <div class="card">
         <h2>Export for Cursor</h2>
         <p>Generates markdown from your decisions, lore/theme picks, art notes, and all comment boxes. Paste into desktop Cursor chat to continue tomorrow.</p>
@@ -1822,17 +1886,125 @@
 
     let state = loadState();
     let lastXP = 0;
+    let lastRankTitle = 'Recruit';
 
     const GAMIFY = { decision: 10, note: 15, noteMin: 12, check: 5, question: 8 };
 
+    const XP_FLAVOR = ['Logged.', 'Noted.', 'On record.', 'Roger.', 'Marked.'];
+
+    const TAB_TRACK = {
+      overview: { decisions: ['pillar-balance'], label: 'Overview', next: 'Set your pillar balance, then hit Art.' },
+      art: { decisions: ['art-style', 'art-palette', 'atmosphere', 'hub-visual', 'character-style', 'gear-detail', 'ui-style', 'enemy-style', 'telegraph-style', 'rendering-style', 'world-theme'], notePrefix: 'art', label: 'Art', next: 'Comment on a concept you actually like.' },
+      lore: { decisions: ['lore'], notePrefix: 'lore', label: 'Lore', next: 'Pick a lore framework that fits.' },
+      theme: { decisions: ['theme', 'narrative-style'], notePrefix: 'theme', label: 'Theme', next: 'Choose the story spine for missions.' },
+      worlds: { decisions: ['worlds-interest', 'worlds-model', 'worlds-timing', 'worlds-coop'], noteKeys: ['worlds-general', 'worlds-arc', 'worlds-map'], qKey: 'worlds', label: 'Worlds', next: 'Explore how biomes could connect.' },
+      progression: { decisions: ['deck', 'rpg-depth', 'loadout', 'loot', 'crafting', 'coop-progression'], notePrefix: 'progression', label: 'RPG', next: 'Decide how deep progression goes.' },
+      monetize: { decisions: ['ai-monetize', 'revenue-model', 'base-price', 'ai-pricing', 'ai-coop-pay', 'cosmetic-types', 'open-source', 'physical-monetize', 'physical-model', 'physical-gameplay', 'physical-variant'], notePrefix: 'monetize', qKey: 'monetize', label: 'Pay', next: 'Skim monetization — optional but worth a pass.' },
+      rooms: { decisions: ['biome', 'room-graph'], noteKeys: ['rooms'], label: 'Rooms', next: 'Lock a first biome direction.' },
+      combat: { decisions: ['combat', 'camera'], noteKeys: ['combat'], label: 'Combat', next: 'Pick combat feel and camera.' },
+      hub: { decisions: ['hub', 'threat'], noteKeys: ['hub'], label: 'Hub', next: 'Define hub meta and threat.' },
+      scenes: { decisions: ['tone', 'scene-camera', 'scene-priority'], noteKeys: ['mockups'], label: 'Scenes', next: 'Set tone and scene priorities.' },
+      open: { qKey: 'open', scope: true, label: 'Open', next: 'Answer open questions & v1 scope.' },
+    };
+
     const RANKS = [
-      { min: 0, title: 'Recruit', hint: 'Tap any option to start earning XP' },
-      { min: 50, title: 'Scout', hint: 'Browse Art — comment on a concept you like' },
-      { min: 120, title: 'Operator', hint: 'Pick lore, theme, and a first biome' },
-      { min: 220, title: 'Veteran', hint: 'Try Worlds, Pay, and RPG tabs' },
-      { min: 350, title: 'Architect', hint: 'Answer open questions & checklists' },
-      { min: 500, title: 'Expedition Lead', hint: 'Almost there — export your decisions!' },
+      { min: 0, title: 'Recruit', hint: 'Every tap shapes the game — start anywhere' },
+      { min: 50, title: 'Scout', hint: 'Art tab — react to a concept, not just scroll' },
+      { min: 120, title: 'Operator', hint: 'Lore + Theme + a first biome locks the vision' },
+      { min: 220, title: 'Veteran', hint: 'Worlds & Pay tabs — wild ideas welcome' },
+      { min: 350, title: 'Architect', hint: 'Open questions & checklists — tie loose ends' },
+      { min: 500, title: 'Expedition Lead', hint: 'Briefing nearly complete — head to Export' },
     ];
+
+    function getRank(xp) {
+      let rank = RANKS[0];
+      for (const r of RANKS) if (xp >= r.min) rank = r;
+      return rank;
+    }
+
+    function tabProgress(tabId) {
+      const t = TAB_TRACK[tabId];
+      if (!t) return { done: 0, total: 0, pct: 100 };
+      let done = 0, total = 0;
+      (t.decisions || []).forEach(id => {
+        total++;
+        const v = state.decisions?.[id];
+        if (v && (Array.isArray(v) ? v.length : true)) done++;
+      });
+      (t.noteKeys || []).forEach(k => {
+        total++;
+        if (state.notes?.[k]?.trim().length >= GAMIFY.noteMin) done++;
+      });
+      if (t.notePrefix && !t.noteKeys) {
+        document.querySelectorAll(`[data-note^="${t.notePrefix}"]`).forEach(el => {
+          total++;
+          if (state.notes?.[el.dataset.note]?.trim().length >= GAMIFY.noteMin) done++;
+        });
+      }
+      if (t.qKey) {
+        const bucket = state[t.qKey] || {};
+        const qLists = t.qKey === 'monetize' ? [MONETIZE_QUESTIONS, PHYSICAL_QUESTIONS]
+          : t.qKey === 'open' ? [OPEN_QUESTIONS]
+          : t.qKey === 'worlds' ? [WORLDS_QUESTIONS] : [];
+        qLists.flat().forEach(q => {
+          total++;
+          const ans = (t.qKey === 'monetize' && q.id.startsWith('pq-') ? state.physical : bucket)?.[q.id];
+          if (ans?.trim().length >= 3) done++;
+        });
+      }
+      if (t.scope) {
+        V1_SCOPE.forEach(s => { total++; if (state.scope?.[s.id]) done++; });
+      }
+      const pct = total ? Math.round((done / total) * 100) : 100;
+      return { done, total, pct };
+    }
+
+    function updateTabBadges() {
+      document.querySelectorAll('nav.bottom button[data-tab]').forEach(btn => {
+        const id = btn.dataset.tab;
+        if (id === 'export') return;
+        const dot = btn.querySelector('.tab-dot');
+        if (!dot) return;
+        const { pct, total } = tabProgress(id);
+        dot.className = 'tab-dot' + (total === 0 ? '' : pct >= 100 ? ' done' : pct > 0 ? ' partial' : '');
+      });
+    }
+
+    function updateMissionCard() {
+      const tabs = Object.keys(TAB_TRACK);
+      let started = 0, complete = 0, nextTab = null, lowestPct = 101;
+      tabs.forEach(id => {
+        const { pct, total, done } = tabProgress(id);
+        if (done > 0) started++;
+        if (total > 0 && pct >= 100) complete++;
+        if (total > 0 && pct < 100 && pct < lowestPct) {
+          lowestPct = pct;
+          nextTab = TAB_TRACK[id];
+        }
+      });
+      const xp = computeXP();
+      const maxXp = computeMaxXP();
+      const pct = maxXp ? Math.round((xp / maxXp) * 100) : 0;
+      const nextEl = document.getElementById('mission-next');
+      const metaEl = document.getElementById('mission-meta');
+      if (nextEl) {
+        if (pct >= 100) nextEl.textContent = 'Briefing complete — export and log off.';
+        else if (nextTab) nextEl.textContent = `Next: ${nextTab.label} — ${nextTab.next}`;
+        else nextEl.textContent = 'Keep going — every section helps.';
+      }
+      if (metaEl) metaEl.textContent = `${complete}/${tabs.length} sections clear · ${pct}% overall`;
+      const debrief = document.getElementById('debrief-status');
+      const debriefMeta = document.getElementById('debrief-meta');
+      if (debrief) {
+        if (pct >= 100) {
+          debrief.textContent = 'All clear — copy summary and paste into Cursor.';
+          debriefMeta.textContent = `${getRank(xp).title} · ${xp} XP · ready to ship decisions`;
+        } else {
+          debrief.textContent = `${pct}% complete — export anytime, but more detail = better build.`;
+          debriefMeta.textContent = `${complete} sections done · ${maxXp - xp} XP remaining`;
+        }
+      }
+    }
 
     function computeXP() {
       let xp = 0;
@@ -1862,12 +2034,6 @@
         + (OPEN_QUESTIONS.length + MONETIZE_QUESTIONS.length + PHYSICAL_QUESTIONS.length + WORLDS_QUESTIONS.length) * GAMIFY.question;
     }
 
-    function getRank(xp) {
-      let rank = RANKS[0];
-      for (const r of RANKS) if (xp >= r.min) rank = r;
-      return rank;
-    }
-
     function loadState() {
       try {
         let raw = localStorage.getItem(STORAGE_KEY);
@@ -1885,10 +2051,15 @@
 
     function saveState() {
       const prevXp = lastXP;
+      const prevRank = lastRankTitle;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       const newXp = updateProgress();
       refreshExport();
-      if (newXp > prevXp) showToast(`+${newXp - prevXp} XP`);
+      if (newXp > prevXp) {
+        const newRank = getRank(newXp).title;
+        if (newRank !== prevRank) showToast(`Promoted: ${newRank}`, 'rank');
+        else showToast(`+${newXp - prevXp} XP · ${XP_FLAVOR[Math.floor(Math.random() * XP_FLAVOR.length)]}`, 'xp');
+      }
     }
 
     function renderDecision(id, containerId) {
@@ -1900,6 +2071,7 @@
           ? (state.decisions[id] || []).includes(opt.id)
           : state.decisions[id] === opt.id;
         return `<button type="button" class="option${sel ? ' selected' : ''}" data-decision="${id}" data-option="${opt.id}" data-type="${def.type}">
+          <span class="option-check">✓</span>
           <span class="option-title">${opt.title}</span>
           <span class="option-desc">${opt.desc}</span>
         </button>`;
@@ -1938,6 +2110,8 @@
         } else {
           state.decisions[id] = state.decisions[id] === opt ? null : opt;
         }
+        btn.classList.add('pop');
+        setTimeout(() => btn.classList.remove('pop'), 260);
         saveState();
         renderAllDecisions();
       });
@@ -2003,16 +2177,30 @@
     }
 
     function updateProgress() {
+      const prevXpSnap = lastXP;
       const xp = computeXP();
       const maxXp = computeMaxXP();
       const pct = maxXp ? Math.min(100, Math.round((xp / maxXp) * 100)) : 0;
       const rank = getRank(xp);
-      document.getElementById('progress-bar').style.width = pct + '%';
+      const bar = document.getElementById('progress-bar');
+      bar.style.width = pct + '%';
+      if (xp > prevXpSnap) {
+        bar.classList.add('gain');
+        setTimeout(() => bar.classList.remove('gain'), 650);
+      }
       document.getElementById('xp-points').textContent = `${xp} / ${maxXp} XP`;
-      document.getElementById('xp-rank').textContent = rank.title;
+      const rankEl = document.getElementById('xp-rank');
+      rankEl.textContent = rank.title;
+      if (rank.title !== lastRankTitle && prevXpSnap > 0) {
+        rankEl.classList.add('bump');
+        setTimeout(() => rankEl.classList.remove('bump'), 450);
+      }
+      lastRankTitle = rank.title;
       const hintEl = document.getElementById('xp-hint');
       if (pct >= 100) hintEl.textContent = 'Briefing complete — export when ready!';
       else hintEl.textContent = rank.hint;
+      updateTabBadges();
+      updateMissionCard();
       lastXP = xp;
       return xp;
     }
@@ -2165,11 +2353,12 @@
       document.getElementById('export-output').value = lines.join('\n');
     }
 
-    function showToast(msg) {
+    function showToast(msg, type = 'xp') {
       const t = document.getElementById('toast');
       t.textContent = msg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2000);
+      t.className = 'toast show ' + type;
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => { t.className = 'toast'; }, 2200);
     }
 
     // Nav
@@ -2262,12 +2451,13 @@
     document.getElementById('btn-export').addEventListener('click', async () => {
       refreshExport();
       const text = document.getElementById('export-output').value;
+      const pct = computeMaxXP() ? Math.round((computeXP() / computeMaxXP()) * 100) : 0;
       try {
         await navigator.clipboard.writeText(text);
-        showToast('Copied to clipboard!');
+        showToast(pct >= 100 ? 'Briefing copied — see you in Cursor' : 'Copied to clipboard', pct >= 100 ? 'complete' : 'xp');
       } catch {
         document.getElementById('export-output').select();
-        showToast('Select all & copy');
+        showToast('Select all & copy', 'xp');
       }
     });
 
@@ -2292,6 +2482,14 @@
 
     renderAllDecisions();
     bindDecisions();
+    document.querySelectorAll('nav.bottom button[data-tab]').forEach(btn => {
+      if (btn.dataset.tab !== 'export' && !btn.querySelector('.tab-dot')) {
+        const dot = document.createElement('span');
+        dot.className = 'tab-dot';
+        btn.appendChild(dot);
+      }
+    });
+    lastRankTitle = getRank(computeXP()).title;
     updateProgress();
     refreshExport();
   </script>
