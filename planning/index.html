@@ -394,6 +394,77 @@
       </div>
     </section>
 
+    <!-- PROGRESSION / RPG -->
+    <section class="panel" id="panel-progression">
+      <div class="card">
+        <h2>Progression &amp; RPG Systems</h2>
+        <p><strong>Current design:</strong> light RPG — 4 classes, weapon loadouts, hub module meta, run loot. <strong>No deck building yet.</strong> Decide how deep progression goes.</p>
+      </div>
+
+      <div class="card">
+        <h2>What's already in the design</h2>
+        <ul>
+          <li><strong>Classes</strong> — Vanguard, Striker, Support, Tech (identity, not deep skill trees)</li>
+          <li><strong>Run loadout</strong> — weapon pick + 1 ability (combat spec dependent)</li>
+          <li><strong>Hub meta</strong> — permanent module upgrades between expeditions</li>
+          <li><strong>Run loot</strong> — scrap/samples lost on team wipe (partial meta kept)</li>
+          <li><strong>No</strong> — levels, stat sheets, card decks, talent trees (yet)</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Deck building — should we add it?</h2>
+        <p>Decks change co-op feel a lot. Three models if yes:</p>
+        <div class="story">
+          <em>Option — Run deck (Slay the Spire-ish)</em>
+          Each player builds a small deck during the expedition from room rewards. Cards = actions (attack, dodge, hack, buff ally). Resets every run. Co-op twist: <strong>combo cards</strong> need two players to play in sequence.<br><br>
+          <em>Option — Team tactic deck (shared)</em>
+          One deck the squad manages together — push your luck on drawing big plays vs saving for boss. Fits puzzle/coordination pillar. Risk: quarterbacking in 8-player lobbies.<br><br>
+          <em>Option — Meta unlock cards only</em>
+          No in-run deck building. Unlock passive "protocol cards" at hub that modify runs (start with shield, +1 revive). Lightest scope.
+        </div>
+        <p class="decision-label">Deck building approach</p>
+        <div id="decision-deck"></div>
+        <p class="comment-label">Comments on deck building</p>
+        <textarea data-note="progression-deck" placeholder="Want decks at all? Solo vs shared? Complexity concerns for 8 players…"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>RPG depth — character progression</h2>
+        <table>
+          <tr><th>Model</th><th>Feel</th><th>Co-op fit</th></tr>
+          <tr><td>Action-only</td><td>Skill-based, no numbers growth</td><td>Best for 8-player clarity</td></tr>
+          <tr><td>Roguelike perks</td><td>Pick 1 of 3 after rooms; resets each run</td><td>Classic, low balance risk</td></tr>
+          <tr><td>Class mastery</td><td>Persistent XP per class → small passives</td><td>Encourages role variety</td></tr>
+          <tr><td>Full skill tree</td><td>Branching talents at hub</td><td>High scope, buildcraft appeal</td></tr>
+        </table>
+        <p class="decision-label">Character progression model</p>
+        <div id="decision-rpg-depth"></div>
+        <p class="comment-label">Comments on RPG depth</p>
+        <textarea data-note="progression-rpg" placeholder="e.g. want perks but not stat grinding…"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Loadout &amp; gear</h2>
+        <p class="decision-label">Pre-run loadout complexity</p>
+        <div id="decision-loadout"></div>
+        <p class="decision-label">Loot &amp; rarity</p>
+        <div id="decision-loot"></div>
+        <p class="decision-label">Crafting at hub?</p>
+        <div id="decision-crafting"></div>
+        <p class="comment-label">Gear / loot comments</p>
+        <textarea data-note="progression-gear" placeholder="Shared stash vs personal? Diablo-style drops?"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Co-op progression rules</h2>
+        <p class="decision-label">How does the squad share power?</p>
+        <div id="decision-coop-progression"></div>
+        <p class="comment-label">Co-op fairness / catch-up</p>
+        <textarea data-note="progression-coop" placeholder="e.g. new players shouldn't feel useless; avoid one carry build…"></textarea>
+      </div>
+    </section>
+
     <!-- ROOMS GDD -->
     <section class="panel" id="panel-rooms">
       <div class="card">
@@ -720,6 +791,7 @@
     <button data-tab="art"><span class="icon">🎨</span>Art</button>
     <button data-tab="lore"><span class="icon">📖</span>Lore</button>
     <button data-tab="theme"><span class="icon">✦</span>Theme</button>
+    <button data-tab="progression"><span class="icon">⬡</span>RPG</button>
     <button data-tab="rooms"><span class="icon">▣</span>Rooms</button>
     <button data-tab="combat"><span class="icon">⚔</span>Combat</button>
     <button data-tab="hub"><span class="icon">⌂</span>Hub</button>
@@ -879,6 +951,65 @@
           { id: 'radio', title: 'In-run comms', desc: 'Handler chatter during expeditions' },
         ],
       },
+      deck: {
+        label: 'Deck building',
+        type: 'single',
+        options: [
+          { id: 'none', title: 'None — action combat only', desc: 'Simplest; current default' },
+          { id: 'run-deck', title: 'Personal run deck', desc: 'Build during expedition; resets each run' },
+          { id: 'team-deck', title: 'Shared team tactic deck', desc: 'Squad manages one deck together' },
+          { id: 'meta-cards', title: 'Hub protocol cards only', desc: 'Passive run modifiers unlocked at outpost' },
+        ],
+      },
+      'rpg-depth': {
+        label: 'Character progression',
+        type: 'single',
+        options: [
+          { id: 'action', title: 'Action-only', desc: 'No levels or perks; player skill only' },
+          { id: 'perks', title: 'Roguelike perks', desc: 'Pick bonuses during run; reset each expedition' },
+          { id: 'mastery', title: 'Class mastery', desc: 'Persistent XP per class → small passives' },
+          { id: 'skilltree', title: 'Full skill tree', desc: 'Branching talents at hub; highest scope' },
+        ],
+      },
+      loadout: {
+        label: 'Pre-run loadout',
+        type: 'single',
+        options: [
+          { id: 'fixed', title: 'Fixed class kit', desc: 'Class defines weapon + ability; quick start' },
+          { id: 'weapon', title: 'Weapon + 1 ability', desc: 'Pick weapon; class gives passive (current lean)' },
+          { id: 'modular', title: 'Modular slots', desc: 'Weapon + gadget + passive + consumable' },
+          { id: 'full', title: 'Full gear sheet', desc: 'Armor, mods, trinkets — ARPG depth' },
+        ],
+      },
+      loot: {
+        label: 'Loot & rarity',
+        type: 'single',
+        options: [
+          { id: 'simple', title: 'Simple resources', desc: 'Scrap, samples, keys — no rarity tiers' },
+          { id: 'rarity', title: 'Rarity tiers', desc: 'Common → legendary gear drops' },
+          { id: 'targeted', title: 'Targeted drops', desc: 'Smart loot toward your build/ class' },
+          { id: 'none', title: 'No gear drops', desc: 'Only hub currency and unlocks' },
+        ],
+      },
+      crafting: {
+        label: 'Hub crafting',
+        type: 'single',
+        options: [
+          { id: 'none', title: 'No crafting', desc: 'Buy/unlock modules only' },
+          { id: 'simple', title: 'Simple crafting', desc: 'Combine scrap → consumables or mods' },
+          { id: 'deep', title: 'Deep crafting', desc: 'Recipes, rerolls, upgrade tiers' },
+        ],
+      },
+      'coop-progression': {
+        label: 'Squad power sharing',
+        type: 'single',
+        options: [
+          { id: 'shared-meta', title: 'Shared hub meta', desc: 'One outpost progress for the party/host' },
+          { id: 'personal-meta', title: 'Personal meta', desc: 'Each player keeps own mastery/unlocks' },
+          { id: 'hybrid', title: 'Hybrid', desc: 'Shared hub + personal class mastery' },
+          { id: 'run-only', title: 'Run-only power', desc: 'No persistence; everyone equal each session' },
+        ],
+      },
     };
 
     const OPEN_QUESTIONS = [
@@ -991,6 +1122,12 @@
           lore: 'decision-lore',
           theme: 'decision-theme',
           'narrative-style': 'decision-narrative-style',
+          deck: 'decision-deck',
+          'rpg-depth': 'decision-rpg-depth',
+          loadout: 'decision-loadout',
+          loot: 'decision-loot',
+          crafting: 'decision-crafting',
+          'coop-progression': 'decision-coop-progression',
         };
         if (map[id]) renderDecision(id, map[id]);
       });
@@ -1003,7 +1140,7 @@
     }
 
     function updateProgress() {
-      const required = ['biome', 'combat', 'hub', 'art-style', 'lore', 'theme'];
+      const required = ['biome', 'combat', 'hub', 'art-style', 'lore', 'theme', 'deck', 'rpg-depth'];
       const done = required.filter(k => state.decisions[k]).length;
       const optional = Object.keys(DECISIONS).length;
       const filled = Object.keys(state.decisions).filter(k => {
@@ -1031,6 +1168,10 @@
       'theme-preserve': 'Theme C — Preserve What Remains',
       'theme-economy': 'Theme D — Edge Economy',
       'theme-general': 'Theme — general notes',
+      'progression-deck': 'Deck building comments',
+      'progression-rpg': 'RPG depth comments',
+      'progression-gear': 'Loadout / loot / gear comments',
+      'progression-coop': 'Co-op progression / fairness comments',
       rooms: 'Rooms & flow notes',
       combat: 'Combat feel notes',
       hub: 'Hub / meta progression notes',
@@ -1050,6 +1191,12 @@
         `- **Lore framework:** ${labelFor('lore', d.lore)}`,
         `- **Connecting theme:** ${labelFor('theme', d.theme)}`,
         `- **Narrative delivery:** ${(d['narrative-style'] || []).map(x => labelFor('narrative-style', x)).join(', ') || '—'}`,
+        `- **Deck building:** ${labelFor('deck', d.deck)}`,
+        `- **RPG progression:** ${labelFor('rpg-depth', d['rpg-depth'])}`,
+        `- **Loadout complexity:** ${labelFor('loadout', d.loadout)}`,
+        `- **Loot model:** ${labelFor('loot', d.loot)}`,
+        `- **Hub crafting:** ${labelFor('crafting', d.crafting)}`,
+        `- **Co-op progression:** ${labelFor('coop-progression', d['coop-progression'])}`,
         `- **First biome:** ${labelFor('biome', d.biome)}`,
         `- **Room graph:** ${labelFor('room-graph', d['room-graph'])}`,
         `- **Combat system:** ${labelFor('combat', d.combat)}`,
