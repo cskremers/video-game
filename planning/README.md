@@ -2,23 +2,24 @@
 
 Mobile-friendly planning app for **Expedition Protocol** design decisions.
 
-## Open on your phone
+## Open on your phone (public URL)
 
-**Option A — local file (same Wi‑Fi)**  
-Serve from your PC, then open the URL on your phone:
+**Live app:** https://cskremers.github.io/video-game/index.html
+
+New tabs: **Art** (concept images), **Lore** (storyline options), **Theme** (mission-connecting spines). Every comment box auto-saves and appears in Export.
+
+Works on any network. Decisions save in your browser. Use **Export → Copy summary** to paste back into Cursor.
+
+Redeploys automatically when `planning/` changes on `main`.
+
+## Open locally (optional)
 
 ```powershell
 cd c:\Users\cskre\Projects\video-game\planning
 python -m http.server 8080
 ```
 
-Visit `http://<your-pc-ip>:8080` on your phone.
-
-**Option B — open file directly**  
-Copy `index.html` to your phone (AirDrop, Google Drive, etc.) and open in Safari/Chrome.
-
-**Option C — GitHub Pages**  
-Push the repo and enable Pages on the `planning/` folder if you want a permanent URL.
+Visit `http://localhost:8080` on your PC only.
 
 ## What it includes
 

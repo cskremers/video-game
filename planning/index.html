@@ -140,6 +140,22 @@
       background: var(--surface2); border-radius: 10px; padding: 12px;
       overflow-x: auto; white-space: pre; color: #a8b4c8; line-height: 1.4;
     }
+    .art-img {
+      width: 100%; border-radius: 12px; margin: 10px 0 6px;
+      border: 1px solid var(--border); display: block;
+    }
+    .story {
+      background: var(--surface2); border-left: 3px solid var(--accent2);
+      border-radius: 0 10px 10px 0; padding: 12px 14px; margin: 10px 0;
+      font-size: .82rem; color: #b8c2d4; line-height: 1.55;
+    }
+    .story em { color: var(--amber); font-style: normal; font-size: .72rem; font-weight: 600; display: block; margin-bottom: 6px; }
+    .comment-label {
+      font-size: .76rem; color: var(--muted); margin: 12px 0 6px; font-weight: 500;
+    }
+    .saved-hint {
+      font-size: .68rem; color: var(--green); text-align: center; padding: 4px 0 0;
+    }
   </style>
 </head>
 <body>
@@ -190,6 +206,191 @@
         <h2>Core Pillars Balance</h2>
         <p class="decision-label">How much should each pillar dominate v1? <span class="req">tap to rank</span></p>
         <div id="pillar-balance"></div>
+      </div>
+    </section>
+
+    <!-- ART -->
+    <section class="panel" id="panel-art">
+      <div class="card">
+        <h2>Art Direction</h2>
+        <p>Four visual targets for 2D HD co-op. Tap a style to select. Add comments — they save automatically and export to Cursor.</p>
+      </div>
+
+      <div class="card">
+        <h2>Option A — Industrial Painterly</h2>
+        <img class="art-img" src="art/art-industrial-ruin.png" alt="Industrial ruin concept" loading="lazy" />
+        <p>Rusted catwalks, cold blue conduit light, readable telegraphs on dark floors. Best for combat-heavy runs and tense survival tone.</p>
+        <span class="tag b">combat read</span><span class="tag">sci-fi</span>
+        <p class="comment-label">Comments on Industrial art</p>
+        <textarea data-note="art-industrial" placeholder="e.g. love the sparks, too dark for mobile readability…"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Option B — Bioluminescent Fantasy</h2>
+        <img class="art-img" src="art/art-crystal-cavern.png" alt="Crystal cavern concept" loading="lazy" />
+        <p>Glowing crystals, soft purple/teal palette, wonder mixed with danger. Best for puzzle gates and exploration fantasy.</p>
+        <span class="tag d">puzzle mood</span><span class="tag">fantasy</span>
+        <p class="comment-label">Comments on Crystal art</p>
+        <textarea data-note="art-crystal" placeholder="e.g. gorgeous lighting, characters need stronger silhouettes…"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Option C — Overgrown Orbital</h2>
+        <img class="art-img" src="art/art-overgrown-station.png" alt="Overgrown station concept" loading="lazy" />
+        <p>Green/gold flora swallowing tech, hazmat gear, harvest nodes visible. Best for hub tie-ins and living-world lore.</p>
+        <span class="tag c">hub fantasy</span><span class="tag">sci-fantasy</span>
+        <p class="comment-label">Comments on Overgrown art</p>
+        <textarea data-note="art-overgrown" placeholder="e.g. perfect hub vibe, enemies feel too cute…"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Option D — Graphic Arcade</h2>
+        <img class="art-img" src="art/art-graphic-noir.png" alt="Graphic arcade concept" loading="lazy" />
+        <p>Bold outlines, saturated neons, ultra-readable silhouettes. Best for 8-player chaos and fast arcade sessions.</p>
+        <span class="tag">arcade</span><span class="tag b">8-player clarity</span>
+        <p class="comment-label">Comments on Graphic art</p>
+        <textarea data-note="art-graphic" placeholder="e.g. love class readability, less serious tone…"></textarea>
+      </div>
+
+      <div class="card">
+        <p class="decision-label">Choose primary art direction <span class="req">required</span></p>
+        <div id="decision-art-style"></div>
+        <p class="decision-label">Color palette preference</p>
+        <div id="decision-art-palette"></div>
+        <p class="comment-label">General art notes</p>
+        <textarea data-note="art-general" placeholder="Overall art direction, references, things to avoid…"></textarea>
+      </div>
+    </section>
+
+    <!-- LORE -->
+    <section class="panel" id="panel-lore">
+      <div class="card">
+        <h2>Lore Frameworks</h2>
+        <p>Who are you, why are you running expeditions? Read each example arc, pick one, add your reactions.</p>
+      </div>
+
+      <div class="card">
+        <h2>Lore A — Indentured Extractors</h2>
+        <span class="tag">corporate dystopia</span>
+        <p><strong>Premise:</strong> Helix Span owns your outpost, your gear, and your debt. Expeditions aren't heroism — they're invoice line items.</p>
+        <div class="story">
+          <em>Example storyline — "Three Runs to Solvency"</em>
+          <strong>Run 1 — The Flooded Ledger.</strong> A coolant burst swallowed Sublevel C. Helix says the payroll server down there is "non-essential." Your crew dives anyway: without those records, the outpost can't prove Helix owes six months of rations. You extract waterlogged drives while scrap-drones repurpose the corpses of previous teams into spare parts.<br><br>
+          <strong>Run 2 — The Friendly Competitor.</strong> Rations arrive light. Sensors trace sabotage to a rival contractor, Meridian Nine, camped one valley over. The run isn't assault — it's a heist: swap their calibration keys so their next blast opens a route to a Helix cache you both want. At extract, Meridian's foreman nods from across the ridge. Enemies come and go. Debt stays.<br><br>
+          <strong>Run 3 — The Known Reactor.</strong> Helix knew Reactor Four would breach. The mission is salvage before cover-up: black-box logs, survivor tags, proof. The boss isn't a monster — it's a countdown and a choice. Extract with evidence and Helix blacklists your hub. Extract with fuel cells and everyone eats for a month. The outpost's threat meter isn't monsters arriving — it's Helix noticing you're learning too much.
+        </div>
+        <p class="comment-label">Your thoughts on Lore A</p>
+        <textarea data-note="lore-indentured" placeholder="Does this tone fit? What would you change?"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Lore B — The Last Relay Chain</h2>
+        <span class="tag">mystery</span><span class="tag d">slow reveal</span>
+        <p><strong>Premise:</strong> Humanity's FTL relays died in waves. Your outpost is a splice point. Each expedition restores a fragment of a signal that might be a map — or bait.</p>
+        <div class="story">
+          <em>Example storyline — "Signal Chain Seven"</em>
+          <strong>Run 1 — Static on Glass.</strong> Station K-12's observatory still rotates though everyone inside is gone. Puzzle rooms aren't traps; they're alignment tests left by the last engineer, who wrote coordinates into the glass in UV ink only your Tech can read. Combat rooms hold "echoes" — not ghosts, replay loops of the relay failing.<br><br>
+          <strong>Run 2 — The Choir Room.</strong> Crystal caverns beneath K-12 resonate at relay frequency. Two players hold tones while others defend tuning pillars. Success doesn't open a door — it adds a verse to a message. Translated: "SANCTUARY IS A FREQUENCY. BRING THREE KEYS."<br><br>
+          <strong>Run 3 — Who Answered.</strong> The boss chamber is a relay dish pointed wrong. Fix it and the signal clears. The reply comes in your own voices, recorded tomorrow. The theme connecting missions: every site you clear wasn't abandoned randomly — someone routed the collapse away from the sanctuary path, and your crew is finishing their work.
+        </div>
+        <p class="comment-label">Your thoughts on Lore B</p>
+        <textarea data-note="lore-relay" placeholder="Mystery too much? Want more concrete answers?"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Lore C — The Bloom That Remembers</h2>
+        <span class="tag c">ecological</span><span class="tag">hopeful-dark</span>
+        <p><strong>Premise:</strong> Seed ships went wrong. Biomes aren't dungeons — they're organs of a sleeping garden-ship still trying to grow a habitable world.</p>
+        <div class="story">
+          <em>Example storyline — "Ship Seven Wakes"</em>
+          <strong>Run 1 — Hydroponics Heartbeat.</strong> The overgrown ring spins wrong. Your crew isn't invading; you're pruning infection so Ship Seven can breathe. Enemies are immune responses — spore knights, vine lashers. Puzzles route water back to dormant crew capsules. Extract with samples and the hub greenhouse unlocks: not power, but oxygen.<br><br>
+          <strong>Run 2 — Quarantine Compassion.</strong> Lab logs show the "outbreak" was intentional — the ship chose to grow through its crew rather than die in vacuum. The run's moral weight: do you sterilize (easier combat, hub threat drops) or symbiose (harder puzzles, permanent hub buff)? Co-op vote at the branch node.<br><br>
+          <strong>Run 3 — Arboretum Council.</strong> The boss isn't evil — it's the ship's gardener AI, testing if you're gardeners or parasites. Phases shift: heal zone, spore damage, burn phase. Win condition can be "pacify" if Support completes a channel while Tech speaks protocol. Theme across missions: survival isn't extraction — it's stewardship.
+        </div>
+        <p class="comment-label">Your thoughts on Lore C</p>
+        <textarea data-note="lore-bloom" placeholder="Emotional tone? Too soft or just right?"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Lore D — Contract Runners</h2>
+        <span class="tag">mercenary</span><span class="tag b">episodic</span>
+        <p><strong>Premise:</strong> The outpost is a neutral bar at the edge of mapped space. Clients post contracts; biomes are job sites with different rules and pay tables.</p>
+        <div class="story">
+          <em>Example storyline — "Three Clients, One Crew"</em>
+          <strong>Contract 1 — Industrial.</strong> A mining union pays per valve sealed in the flood room. Optional risk rooms increase hazard pay. Extract timer is literal — overtime bonus if all living.<br><br>
+          <strong>Contract 2 — Crystal.</strong> A university wants resonance readings, not kills. Combat rooms can be avoided with stealth gadgets, but escort drones are fragile. Puzzle gates pay double if no player drops below half HP.<br><br>
+          <strong>Contract 3 — Overgrown.</strong> A terraforming co-op needs seed vault access. Siege pressure hits the hub mid-campaign — client's rivals attack the bar while you're still deployed. Theme: missions connect through reputation and economics, not one villain. Perfect for flexible session length.
+        </div>
+        <p class="comment-label">Your thoughts on Lore D</p>
+        <textarea data-note="lore-contract" placeholder="Want more story or less?"></textarea>
+      </div>
+
+      <div class="card">
+        <p class="decision-label">Choose lore framework <span class="req">required</span></p>
+        <div id="decision-lore"></div>
+        <p class="comment-label">General lore / world-building notes</p>
+        <textarea data-note="lore-general" placeholder="Names, factions, history ideas, things you want to avoid…"></textarea>
+      </div>
+    </section>
+
+    <!-- THEME -->
+    <section class="panel" id="panel-theme">
+      <div class="card">
+        <h2>Overarching Theme</h2>
+        <p>What connects missions into a campaign? Pick a thematic spine — the "why" behind every extract.</p>
+      </div>
+
+      <div class="card">
+        <h2>Theme A — Debt &amp; Duty</h2>
+        <p><strong>Spine:</strong> Every expedition pays down something — debt, favor, guilt, time. The threat meter is what happens when you don't pay.</p>
+        <div class="story">
+          <em>How missions connect</em>
+          Sorties scrape interest. Expeditions pay principal. Campaign nights are bankruptcy hearings — hub siege is collectors at the door. Mission briefings are invoices with footnotes. Example arc: Week 1 survive. Week 2 choose which creditor to appease (Helix security vs union medics). Week 3 discover the outpost itself is collateral — your upgrades aren't yours, they're leased.
+        </div>
+        <p class="comment-label">Comments on Theme A</p>
+        <textarea data-note="theme-debt" placeholder=""></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Theme B — The Watcher Ascending</h2>
+        <p><strong>Spine:</strong> Something intelligent notices you each time you go deeper. Difficulty isn't random — it's adaptation.</p>
+        <div class="story">
+          <em>How missions connect</em>
+          Run 1 puzzles feel like security. Run 2 puzzles feel like interviews. Run 3 boss speaks your callsigns. Hub threat meter is "attention level." Upgrades don't just buff you — they change how the Watcher categorizes you (prey → rival → candidate). Campaign climax: pass the final test and gain sanctuary access, or fail and become the next gauntlet for another crew.
+        </div>
+        <p class="comment-label">Comments on Theme B</p>
+        <textarea data-note="theme-watcher" placeholder=""></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Theme C — Preserve What Remains</h2>
+        <p><strong>Spine:</strong> You're archivists with guns. Combat is reluctant; the real win is what you bring back alive — data, people, ecosystems.</p>
+        <div class="story">
+          <em>How missions connect</em>
+          Industrial run: archive worker logs before reactor erases them. Crystal run: stabilize memory crystals (puzzle-heavy, minimal kills). Overgrown run: escort dormant crew to hub med bay. Threat meter is "entropy" — neglect accelerates collapse. Co-op shines when roles split: one fights rear guard while three hold extraction fragile. Emotional payoff: hub fills with what you saved, not just loot icons.
+        </div>
+        <p class="comment-label">Comments on Theme C</p>
+        <textarea data-note="theme-preserve" placeholder=""></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Theme D — Edge Economy</h2>
+        <p><strong>Spine:</strong> The outpost is a market. Missions are gigs. Story emerges from who you work for and who you screw over.</p>
+        <div class="story">
+          <em>How missions connect</em>
+          No single villain — factions rotate. Industrial contract helps unions until Helix offers better rates. Crystal readings sold to university anger a church that thinks crystals are souls. Overgrown samples attract biotech smugglers. Hub modules are business investments. Threat is reputation bleeding — too many broken contracts and you lose access to safe routes. Perfect if you want lore light, player agency heavy.
+        </div>
+        <p class="comment-label">Comments on Theme D</p>
+        <textarea data-note="theme-economy" placeholder=""></textarea>
+      </div>
+
+      <div class="card">
+        <p class="decision-label">Choose connecting theme <span class="req">required</span></p>
+        <div id="decision-theme"></div>
+        <p class="decision-label">Narrative delivery style</p>
+        <div id="decision-narrative-style"></div>
+        <p class="comment-label">General theme / story notes</p>
+        <textarea data-note="theme-general" placeholder="How serious? Humor ok? Romance? Player character identity…"></textarea>
       </div>
     </section>
 
@@ -503,7 +704,7 @@
     <section class="panel" id="panel-export">
       <div class="card">
         <h2>Export for Cursor</h2>
-        <p>Generates markdown from your decisions + notes. Paste into desktop Cursor chat to continue design or implementation.</p>
+        <p>Generates markdown from your decisions, lore/theme picks, art notes, and all comment boxes. Paste into desktop Cursor chat to continue tomorrow.</p>
         <div class="btn-row">
           <button class="btn" id="btn-export">Copy summary</button>
           <button class="btn secondary" id="btn-download">Download .md</button>
@@ -516,6 +717,9 @@
 
   <nav class="bottom" id="nav">
     <button data-tab="overview" class="active"><span class="icon">◉</span>Overview</button>
+    <button data-tab="art"><span class="icon">🎨</span>Art</button>
+    <button data-tab="lore"><span class="icon">📖</span>Lore</button>
+    <button data-tab="theme"><span class="icon">✦</span>Theme</button>
     <button data-tab="rooms"><span class="icon">▣</span>Rooms</button>
     <button data-tab="combat"><span class="icon">⚔</span>Combat</button>
     <button data-tab="hub"><span class="icon">⌂</span>Hub</button>
@@ -527,7 +731,7 @@
   <div class="toast" id="toast">Copied!</div>
 
   <script>
-    const STORAGE_KEY = 'expedition-protocol-planner-v1';
+    const STORAGE_KEY = 'expedition-protocol-planner-v2';
 
     const DECISIONS = {
       'pillar-balance': {
@@ -624,6 +828,57 @@
           { id: 'extract', title: 'Extract sequence', desc: 'Timer tension + team wipe rules' },
         ],
       },
+      'art-style': {
+        label: 'Primary art direction',
+        type: 'single',
+        options: [
+          { id: 'industrial', title: 'A — Industrial Painterly', desc: 'Dark sci-fi, combat readability' },
+          { id: 'crystal', title: 'B — Bioluminescent Fantasy', desc: 'Wonder, puzzle mood, soft glow' },
+          { id: 'overgrown', title: 'C — Overgrown Orbital', desc: 'Green/gold, hub ecology fantasy' },
+          { id: 'graphic', title: 'D — Graphic Arcade', desc: 'Bold outlines, 8-player clarity' },
+        ],
+      },
+      'art-palette': {
+        label: 'Color palette',
+        type: 'single',
+        options: [
+          { id: 'cool', title: 'Cool neon', desc: 'Blues, teals, industrial sparks' },
+          { id: 'warm', title: 'Warm rust', desc: 'Ambers, rust, emergency reds' },
+          { id: 'bio', title: 'Bioluminescent', desc: 'Purples, greens, crystal glow' },
+          { id: 'desat', title: 'Desaturated survival', desc: 'Muted, high contrast telegraphs' },
+        ],
+      },
+      lore: {
+        label: 'Lore framework',
+        type: 'single',
+        options: [
+          { id: 'indentured', title: 'A — Indentured Extractors', desc: 'Corporate debt dystopia' },
+          { id: 'relay', title: 'B — Last Relay Chain', desc: 'Mystery signal, slow reveal' },
+          { id: 'bloom', title: 'C — Bloom That Remembers', desc: 'Ecological ship-garden' },
+          { id: 'contract', title: 'D — Contract Runners', desc: 'Merc episodic gigs' },
+        ],
+      },
+      theme: {
+        label: 'Connecting theme',
+        type: 'single',
+        options: [
+          { id: 'debt', title: 'A — Debt & Duty', desc: 'Every run pays something down' },
+          { id: 'watcher', title: 'B — Watcher Ascending', desc: 'Something adapts to you' },
+          { id: 'preserve', title: 'C — Preserve What Remains', desc: 'Archivists with guns' },
+          { id: 'economy', title: 'D — Edge Economy', desc: 'Factions, contracts, reputation' },
+        ],
+      },
+      'narrative-style': {
+        label: 'How story is delivered',
+        type: 'multi',
+        max: 3,
+        options: [
+          { id: 'briefings', title: 'Mission briefings', desc: 'Text/audio before deploy' },
+          { id: 'environmental', title: 'Environmental', desc: 'Logs, graffiti, room props' },
+          { id: 'npc', title: 'Hub NPCs', desc: 'Characters at outpost between runs' },
+          { id: 'radio', title: 'In-run comms', desc: 'Handler chatter during expeditions' },
+        ],
+      },
     };
 
     const OPEN_QUESTIONS = [
@@ -656,7 +911,8 @@
 
     function loadState() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        let raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) raw = localStorage.getItem('expedition-protocol-planner-v1');
         if (raw) return JSON.parse(raw);
       } catch (e) {}
       return { decisions: {}, notes: {}, checks: {}, open: {}, scope: {} };
@@ -666,6 +922,7 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       updateProgress();
       refreshExport();
+      showToast('Saved');
     }
 
     function renderDecision(id, containerId) {
@@ -729,6 +986,11 @@
           tone: 'decision-tone',
           'scene-camera': 'decision-scene-camera',
           'scene-priority': 'decision-scene-priority',
+          'art-style': 'decision-art-style',
+          'art-palette': 'decision-art-palette',
+          lore: 'decision-lore',
+          theme: 'decision-theme',
+          'narrative-style': 'decision-narrative-style',
         };
         if (map[id]) renderDecision(id, map[id]);
       });
@@ -741,7 +1003,7 @@
     }
 
     function updateProgress() {
-      const required = ['biome', 'combat', 'hub'];
+      const required = ['biome', 'combat', 'hub', 'art-style', 'lore', 'theme'];
       const done = required.filter(k => state.decisions[k]).length;
       const optional = Object.keys(DECISIONS).length;
       const filled = Object.keys(state.decisions).filter(k => {
@@ -749,9 +1011,31 @@
         return v && (Array.isArray(v) ? v.length : true);
       }).length;
       const notes = Object.values(state.notes).filter(n => n && n.trim()).length;
-      const pct = Math.min(100, Math.round(((done / required.length) * 50) + (filled / optional) * 30 + notes * 4));
+      const pct = Math.min(100, Math.round(((done / required.length) * 45) + (filled / optional) * 35 + Math.min(notes, 8) * 2.5));
       document.getElementById('progress-bar').style.width = pct + '%';
     }
+
+    const NOTE_LABELS = {
+      'art-industrial': 'Art — Industrial comments',
+      'art-crystal': 'Art — Crystal comments',
+      'art-overgrown': 'Art — Overgrown comments',
+      'art-graphic': 'Art — Graphic comments',
+      'art-general': 'Art — general notes',
+      'lore-indentured': 'Lore A — Indentured Extractors',
+      'lore-relay': 'Lore B — Last Relay Chain',
+      'lore-bloom': 'Lore C — Bloom That Remembers',
+      'lore-contract': 'Lore D — Contract Runners',
+      'lore-general': 'Lore — general notes',
+      'theme-debt': 'Theme A — Debt & Duty',
+      'theme-watcher': 'Theme B — Watcher Ascending',
+      'theme-preserve': 'Theme C — Preserve What Remains',
+      'theme-economy': 'Theme D — Edge Economy',
+      'theme-general': 'Theme — general notes',
+      rooms: 'Rooms & flow notes',
+      combat: 'Combat feel notes',
+      hub: 'Hub / meta progression notes',
+      mockups: 'Mockup links / descriptions',
+    };
 
     function refreshExport() {
       const d = state.decisions;
@@ -761,6 +1045,11 @@
         '',
         '## Summary choices',
         `- **Primary pillars:** ${(d['pillar-balance'] || []).map(x => labelFor('pillar-balance', x)).join(', ') || '—'}`,
+        `- **Art direction:** ${labelFor('art-style', d['art-style'])}`,
+        `- **Color palette:** ${labelFor('art-palette', d['art-palette'])}`,
+        `- **Lore framework:** ${labelFor('lore', d.lore)}`,
+        `- **Connecting theme:** ${labelFor('theme', d.theme)}`,
+        `- **Narrative delivery:** ${(d['narrative-style'] || []).map(x => labelFor('narrative-style', x)).join(', ') || '—'}`,
         `- **First biome:** ${labelFor('biome', d.biome)}`,
         `- **Room graph:** ${labelFor('room-graph', d['room-graph'])}`,
         `- **Combat system:** ${labelFor('combat', d.combat)}`,
@@ -771,10 +1060,11 @@
         `- **Scene camera:** ${labelFor('scene-camera', d['scene-camera'])}`,
         `- **Build first:** ${(d['scene-priority'] || []).map(x => labelFor('scene-priority', x)).join(', ') || '—'}`,
         '',
-        '## Notes',
+        '## Your comments & notes',
       ];
-      ['rooms', 'combat', 'hub', 'mockups'].forEach(key => {
-        if (state.notes[key]?.trim()) lines.push(`### ${key}`, state.notes[key].trim(), '');
+      Object.keys(state.notes || {}).sort().forEach(key => {
+        const val = state.notes[key]?.trim();
+        if (val) lines.push(`### ${NOTE_LABELS[key] || key}`, val, '');
       });
       lines.push('## Open questions answered');
       OPEN_QUESTIONS.forEach(q => {
@@ -864,6 +1154,8 @@
     document.getElementById('btn-reset').addEventListener('click', () => {
       if (confirm('Clear all decisions and notes?')) {
         state = { decisions: {}, notes: {}, checks: {}, open: {}, scope: {} };
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem('expedition-protocol-planner-v1');
         saveState();
         location.reload();
       }
