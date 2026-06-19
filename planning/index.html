@@ -213,52 +213,133 @@
     <section class="panel" id="panel-art">
       <div class="card">
         <h2>Art Direction</h2>
-        <p>Four visual targets for 2D HD co-op. Tap a style to select. Add comments — they save automatically and export to Cursor.</p>
+        <p>Browse concept art by category. Tap options to select. Comment boxes save automatically and export to Cursor.</p>
       </div>
 
       <div class="card">
-        <h2>Option A — Industrial Painterly</h2>
+        <h2>World environments (pick one primary)</h2>
+        <p>How expedition rooms and biomes look in action.</p>
+      </div>
+
+      <div class="card">
+        <h2>A — Industrial Painterly</h2>
         <img class="art-img" src="art/art-industrial-ruin.png" alt="Industrial ruin concept" loading="lazy" />
-        <p>Rusted catwalks, cold blue conduit light, readable telegraphs on dark floors. Best for combat-heavy runs and tense survival tone.</p>
+        <p>Rusted catwalks, cold blue conduit light, readable telegraphs on dark floors.</p>
         <span class="tag b">combat read</span><span class="tag">sci-fi</span>
-        <p class="comment-label">Comments on Industrial art</p>
-        <textarea data-note="art-industrial" placeholder="e.g. love the sparks, too dark for mobile readability…"></textarea>
+        <p class="comment-label">Comments</p>
+        <textarea data-note="art-industrial" placeholder=""></textarea>
       </div>
 
       <div class="card">
-        <h2>Option B — Bioluminescent Fantasy</h2>
+        <h2>B — Bioluminescent Fantasy</h2>
         <img class="art-img" src="art/art-crystal-cavern.png" alt="Crystal cavern concept" loading="lazy" />
-        <p>Glowing crystals, soft purple/teal palette, wonder mixed with danger. Best for puzzle gates and exploration fantasy.</p>
+        <p>Glowing crystals, purple/teal palette, wonder mixed with danger.</p>
         <span class="tag d">puzzle mood</span><span class="tag">fantasy</span>
-        <p class="comment-label">Comments on Crystal art</p>
-        <textarea data-note="art-crystal" placeholder="e.g. gorgeous lighting, characters need stronger silhouettes…"></textarea>
+        <p class="comment-label">Comments</p>
+        <textarea data-note="art-crystal" placeholder=""></textarea>
       </div>
 
       <div class="card">
-        <h2>Option C — Overgrown Orbital</h2>
+        <h2>C — Overgrown Orbital</h2>
         <img class="art-img" src="art/art-overgrown-station.png" alt="Overgrown station concept" loading="lazy" />
-        <p>Green/gold flora swallowing tech, hazmat gear, harvest nodes visible. Best for hub tie-ins and living-world lore.</p>
+        <p>Flora swallowing tech, hazmat gear, harvest nodes visible.</p>
         <span class="tag c">hub fantasy</span><span class="tag">sci-fantasy</span>
-        <p class="comment-label">Comments on Overgrown art</p>
-        <textarea data-note="art-overgrown" placeholder="e.g. perfect hub vibe, enemies feel too cute…"></textarea>
+        <p class="comment-label">Comments</p>
+        <textarea data-note="art-overgrown" placeholder=""></textarea>
       </div>
 
       <div class="card">
-        <h2>Option D — Graphic Arcade</h2>
+        <h2>D — Graphic Arcade</h2>
         <img class="art-img" src="art/art-graphic-noir.png" alt="Graphic arcade concept" loading="lazy" />
-        <p>Bold outlines, saturated neons, ultra-readable silhouettes. Best for 8-player chaos and fast arcade sessions.</p>
-        <span class="tag">arcade</span><span class="tag b">8-player clarity</span>
-        <p class="comment-label">Comments on Graphic art</p>
-        <textarea data-note="art-graphic" placeholder="e.g. love class readability, less serious tone…"></textarea>
+        <p>Bold outlines, saturated neons, ultra-readable silhouettes.</p>
+        <span class="tag">arcade</span><span class="tag b">8-player</span>
+        <p class="comment-label">Comments</p>
+        <textarea data-note="art-graphic" placeholder=""></textarea>
       </div>
 
       <div class="card">
-        <p class="decision-label">Choose primary art direction <span class="req">required</span></p>
+        <h2>E — Pixel HD</h2>
+        <img class="art-img" src="art/art-pixel-hd.png" alt="Pixel HD concept" loading="lazy" />
+        <p>Crisp high-res pixel art — retro soul, modern clarity. Strong for Steam indie identity and 60fps targets.</p>
+        <span class="tag">retro-modern</span><span class="tag b">performance</span>
+        <p class="comment-label">Comments</p>
+        <textarea data-note="art-pixel" placeholder=""></textarea>
+      </div>
+
+      <div class="card">
+        <h2>F — Soft Painterly</h2>
+        <img class="art-img" src="art/art-painterly-soft.png" alt="Soft painterly concept" loading="lazy" />
+        <p>Watercolor edges, pastel light, adventurous not grim. Inviting for longer co-op sessions.</p>
+        <span class="tag d">cozy-adventure</span><span class="tag">whimsical</span>
+        <p class="comment-label">Comments</p>
+        <textarea data-note="art-painterly" placeholder=""></textarea>
+      </div>
+
+      <div class="card">
+        <h2>G — Survival Noir</h2>
+        <img class="art-img" src="art/art-survival-noir.png" alt="Survival noir concept" loading="lazy" />
+        <p>Flashlights, fog, desaturated palette, red telegraphs pop. Tense horror-leaning expeditions.</p>
+        <span class="tag">survival</span><span class="tag b">high tension</span>
+        <p class="comment-label">Comments</p>
+        <textarea data-note="art-noir" placeholder=""></textarea>
+      </div>
+
+      <div class="card">
+        <p class="decision-label">Primary world art direction <span class="req">required</span></p>
         <div id="decision-art-style"></div>
         <p class="decision-label">Color palette preference</p>
         <div id="decision-art-palette"></div>
+        <p class="decision-label">Overall atmosphere</p>
+        <div id="decision-atmosphere"></div>
+      </div>
+
+      <div class="card">
+        <h2>Hub &amp; between-run space</h2>
+        <img class="art-img" src="art/art-hub-outpost.png" alt="Hub outpost concept" loading="lazy" />
+        <p>Where crews return between expeditions — upgrade terminals, mission board, lived-in warmth vs sterile military.</p>
+        <p class="decision-label">Hub visual style</p>
+        <div id="decision-hub-visual"></div>
+        <p class="comment-label">Hub art comments</p>
+        <textarea data-note="art-hub" placeholder="e.g. more cluttered personal touches, less cantina…"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Characters &amp; classes</h2>
+        <img class="art-img" src="art/art-characters-realistic.png" alt="Character lineup concept" loading="lazy" />
+        <p>Four-class readability at a glance. Compare with Graphic Arcade (D) for chibi/bold vs realistic hero proportions.</p>
+        <p class="decision-label">Character proportions</p>
+        <div id="decision-character-style"></div>
+        <p class="decision-label">Gear detail level</p>
+        <div id="decision-gear-detail"></div>
+        <p class="comment-label">Character art comments</p>
+        <textarea data-note="art-characters" placeholder=""></textarea>
+      </div>
+
+      <div class="card">
+        <h2>UI &amp; HUD</h2>
+        <img class="art-img" src="art/art-ui-minimal.png" alt="UI HUD concept" loading="lazy" />
+        <p>In-combat overlay: HP, minimap, cooldowns. Must stay readable with 4–8 players and telegraphs stacking.</p>
+        <p class="decision-label">UI / HUD style</p>
+        <div id="decision-ui-style"></div>
+        <p class="comment-label">UI comments</p>
+        <textarea data-note="art-ui" placeholder=""></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Enemies &amp; telegraphs</h2>
+        <img class="art-img" src="art/art-enemy-silhouettes.png" alt="Enemy silhouette concept" loading="lazy" />
+        <p>Distinct shape language per enemy type — players must read threats instantly in co-op chaos.</p>
+        <p class="decision-label">Enemy design direction</p>
+        <div id="decision-enemy-style"></div>
+        <p class="decision-label">Telegraph style</p>
+        <div id="decision-telegraph-style"></div>
+        <p class="comment-label">Enemy / VFX comments</p>
+        <textarea data-note="art-enemies" placeholder=""></textarea>
+      </div>
+
+      <div class="card">
         <p class="comment-label">General art notes</p>
-        <textarea data-note="art-general" placeholder="Overall art direction, references, things to avoid…"></textarea>
+        <textarea data-note="art-general" placeholder="References, games you want to emulate, hard nos…"></textarea>
       </div>
     </section>
 
@@ -901,13 +982,16 @@
         ],
       },
       'art-style': {
-        label: 'Primary art direction',
+        label: 'Primary world art direction',
         type: 'single',
         options: [
           { id: 'industrial', title: 'A — Industrial Painterly', desc: 'Dark sci-fi, combat readability' },
           { id: 'crystal', title: 'B — Bioluminescent Fantasy', desc: 'Wonder, puzzle mood, soft glow' },
           { id: 'overgrown', title: 'C — Overgrown Orbital', desc: 'Green/gold, hub ecology fantasy' },
           { id: 'graphic', title: 'D — Graphic Arcade', desc: 'Bold outlines, 8-player clarity' },
+          { id: 'pixel', title: 'E — Pixel HD', desc: 'Crisp high-res pixel, retro-modern' },
+          { id: 'painterly', title: 'F — Soft Painterly', desc: 'Watercolor, cozy adventure' },
+          { id: 'noir', title: 'G — Survival Noir', desc: 'Fog, flashlights, high tension' },
         ],
       },
       'art-palette': {
@@ -918,6 +1002,75 @@
           { id: 'warm', title: 'Warm rust', desc: 'Ambers, rust, emergency reds' },
           { id: 'bio', title: 'Bioluminescent', desc: 'Purples, greens, crystal glow' },
           { id: 'desat', title: 'Desaturated survival', desc: 'Muted, high contrast telegraphs' },
+        ],
+      },
+      atmosphere: {
+        label: 'Overall atmosphere',
+        type: 'single',
+        options: [
+          { id: 'adventure', title: 'Adventurous', desc: 'Curiosity, bright spots, hope' },
+          { id: 'balanced', title: 'Balanced tension', desc: 'Danger + relief rhythm' },
+          { id: 'survival', title: 'Survival pressure', desc: 'Resource anxiety, limited light' },
+          { id: 'horror', title: 'Horror-leaning', desc: 'Dread, sound design critical' },
+        ],
+      },
+      'hub-visual': {
+        label: 'Hub visual style',
+        type: 'single',
+        options: [
+          { id: 'cantina', title: 'Lived-in cantina', desc: 'Warm, social, personal touches' },
+          { id: 'military', title: 'Military briefing', desc: 'Sterile, tactical, efficient' },
+          { id: 'workshop', title: 'Scrappy workshop', desc: 'Cluttered, jury-rigged, industrial' },
+          { id: 'organic', title: 'Organic sanctuary', desc: 'Greenhouse, calm, bloom lore fit' },
+        ],
+      },
+      'character-style': {
+        label: 'Character proportions',
+        type: 'single',
+        options: [
+          { id: 'realistic', title: 'Realistic hero', desc: 'Normal proportions, detailed gear' },
+          { id: 'stylized', title: 'Stylized hero', desc: 'Slightly exaggerated, readable' },
+          { id: 'chibi', title: 'Chibi / compact', desc: 'Big heads, cute, arcade friendly' },
+          { id: 'silhouette', title: 'Silhouette-first', desc: 'Minimal detail, max clarity' },
+        ],
+      },
+      'gear-detail': {
+        label: 'Gear detail level',
+        type: 'single',
+        options: [
+          { id: 'minimal', title: 'Minimal', desc: 'Clean shapes, fast to animate' },
+          { id: 'medium', title: 'Medium', desc: 'Class-readable gear pieces' },
+          { id: 'high', title: 'High detail', desc: 'Lots of straps, lights, pouches' },
+        ],
+      },
+      'ui-style': {
+        label: 'UI / HUD style',
+        type: 'single',
+        options: [
+          { id: 'minimal', title: 'Minimal sci-fi', desc: 'Translucent panels, thin lines' },
+          { id: 'diegetic', title: 'Diegetic', desc: 'Helmet visor / wrist display fiction' },
+          { id: 'arcade', title: 'Arcade bold', desc: 'Big bars, chunky icons' },
+          { id: 'immersive', title: 'Immersive sparse', desc: 'Hide UI until needed' },
+        ],
+      },
+      'enemy-style': {
+        label: 'Enemy design',
+        type: 'single',
+        options: [
+          { id: 'mechanical', title: 'Mechanical', desc: 'Drones, bots, industrial hazards' },
+          { id: 'organic', title: 'Organic', desc: 'Creatures, spores, vines' },
+          { id: 'mixed', title: 'Mixed silhouettes', desc: 'Both; shape tells threat type' },
+          { id: 'glitch', title: 'Glitch / echo', desc: 'Relay lore; replay anomalies' },
+        ],
+      },
+      'telegraph-style': {
+        label: 'Telegraph VFX',
+        type: 'single',
+        options: [
+          { id: 'floor', title: 'Floor AoE zones', desc: 'Red circles, clear countdown fill' },
+          { id: 'outline', title: 'Enemy outline flash', desc: 'White/red flash before windup' },
+          { id: 'both', title: 'Both combined', desc: 'Maximum readability (recommended)' },
+          { id: 'subtle', title: 'Subtle / skill-based', desc: 'Less hand-holding, harder' },
         ],
       },
       lore: {
@@ -1119,6 +1272,13 @@
           'scene-priority': 'decision-scene-priority',
           'art-style': 'decision-art-style',
           'art-palette': 'decision-art-palette',
+          atmosphere: 'decision-atmosphere',
+          'hub-visual': 'decision-hub-visual',
+          'character-style': 'decision-character-style',
+          'gear-detail': 'decision-gear-detail',
+          'ui-style': 'decision-ui-style',
+          'enemy-style': 'decision-enemy-style',
+          'telegraph-style': 'decision-telegraph-style',
           lore: 'decision-lore',
           theme: 'decision-theme',
           'narrative-style': 'decision-narrative-style',
@@ -1157,6 +1317,13 @@
       'art-crystal': 'Art — Crystal comments',
       'art-overgrown': 'Art — Overgrown comments',
       'art-graphic': 'Art — Graphic comments',
+      'art-pixel': 'Art — Pixel HD comments',
+      'art-painterly': 'Art — Soft Painterly comments',
+      'art-noir': 'Art — Survival Noir comments',
+      'art-hub': 'Art — Hub / outpost comments',
+      'art-characters': 'Art — Character design comments',
+      'art-ui': 'Art — UI / HUD comments',
+      'art-enemies': 'Art — Enemy / telegraph comments',
       'art-general': 'Art — general notes',
       'lore-indentured': 'Lore A — Indentured Extractors',
       'lore-relay': 'Lore B — Last Relay Chain',
@@ -1188,6 +1355,13 @@
         `- **Primary pillars:** ${(d['pillar-balance'] || []).map(x => labelFor('pillar-balance', x)).join(', ') || '—'}`,
         `- **Art direction:** ${labelFor('art-style', d['art-style'])}`,
         `- **Color palette:** ${labelFor('art-palette', d['art-palette'])}`,
+        `- **Atmosphere:** ${labelFor('atmosphere', d.atmosphere)}`,
+        `- **Hub visual:** ${labelFor('hub-visual', d['hub-visual'])}`,
+        `- **Character style:** ${labelFor('character-style', d['character-style'])}`,
+        `- **Gear detail:** ${labelFor('gear-detail', d['gear-detail'])}`,
+        `- **UI / HUD:** ${labelFor('ui-style', d['ui-style'])}`,
+        `- **Enemy design:** ${labelFor('enemy-style', d['enemy-style'])}`,
+        `- **Telegraphs:** ${labelFor('telegraph-style', d['telegraph-style'])}`,
         `- **Lore framework:** ${labelFor('lore', d.lore)}`,
         `- **Connecting theme:** ${labelFor('theme', d.theme)}`,
         `- **Narrative delivery:** ${(d['narrative-style'] || []).map(x => labelFor('narrative-style', x)).join(', ') || '—'}`,
