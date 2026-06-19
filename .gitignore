@@ -1,0 +1,34 @@
+# Godot
+.godot/
+*.translation
+export_presets.cfg.bak
+
+# Exports
+build/
+dist/
+*.exe
+*.pck
+*.zip
+*.dmg
+*.app
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets / local config
+.env
+.env.*
+!.env.example
+steamcmd/
+*.vdf.local
+
+# GodotSteam temp / install cache
+_godotsteam_*/
+
+# Crash logs (local dev)
+user://crashes/
+
+# IDE
+.vscode/
+*.swp

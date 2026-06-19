@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#12141c" />
+  <title>Expedition Protocol — Design Planner</title>
+  <style>
+    :root {
+      --bg: #0e1016;
+      --surface: #171a24;
+      --surface2: #1f2433;
+      --border: #2a3145;
+      --text: #e8ecf4;
+      --muted: #8b95a8;
+      --accent: #5b8cff;
+      --accent2: #7c5cff;
+      --green: #3dd68c;
+      --amber: #f5b942;
+      --red: #f07178;
+      --radius: 14px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: calc(72px + var(--safe-bottom));
+    }
+    header {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(14,16,22,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px 10px;
+    }
+    header h1 { font-size: 1.05rem; font-weight: 700; }
+    header p { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+    .progress-wrap {
+      margin-top: 10px; height: 4px; background: var(--surface2); border-radius: 99px; overflow: hidden;
+    }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; transition: width .3s; }
+    main { padding: 12px 14px 24px; max-width: 720px; margin: 0 auto; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .card h2 { font-size: .95rem; margin-bottom: 8px; }
+    .card h3 { font-size: .85rem; color: var(--accent); margin: 14px 0 6px; }
+    .card p, .card li { font-size: .84rem; color: #c5cdd9; }
+    .card ul { padding-left: 18px; margin: 6px 0; }
+    .tag {
+      display: inline-block; font-size: .68rem; font-weight: 600;
+      padding: 3px 8px; border-radius: 99px; margin-right: 6px; margin-bottom: 6px;
+      background: var(--surface2); color: var(--muted); border: 1px solid var(--border);
+    }
+    .tag.b { color: #7eb6ff; border-color: #3a5080; }
+    .tag.c { color: #3dd68c; border-color: #2a6048; }
+    .tag.d { color: #c9a0ff; border-color: #5a4080; }
+    .option {
+      display: block; width: 100%; text-align: left;
+      background: var(--surface2);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+    .option.selected { border-color: var(--accent); background: #1a2540; }
+    .option-title { font-weight: 600; font-size: .88rem; display: block; margin-bottom: 4px; }
+    .option-desc { font-size: .78rem; color: var(--muted); display: block; }
+    .decision-label {
+      font-size: .82rem; font-weight: 600; margin: 16px 0 8px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .decision-label .req { color: var(--amber); font-size: .7rem; font-weight: 500; }
+    textarea, input[type=text] {
+      width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text); padding: 10px 12px;
+      font-size: .84rem; font-family: inherit; resize: vertical; min-height: 72px;
+    }
+    textarea:focus, input:focus { outline: none; border-color: var(--accent); }
+    table { width: 100%; border-collapse: collapse; font-size: .76rem; margin: 8px 0; }
+    th, td { border: 1px solid var(--border); padding: 6px 8px; text-align: left; vertical-align: top; }
+    th { background: var(--surface2); color: var(--muted); font-weight: 600; }
+    nav.bottom {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+      display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      background: rgba(14,16,22,.96); backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      padding: 6px 4px calc(6px + var(--safe-bottom));
+    }
+    nav.bottom button {
+      flex: 1 0 auto; min-width: 64px;
+      background: none; border: none; color: var(--muted);
+      font-size: .62rem; padding: 6px 4px; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+    }
+    nav.bottom button.active { color: var(--accent); }
+    nav.bottom button span.icon { font-size: 1.1rem; line-height: 1; }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .btn {
+      flex: 1; min-width: 120px;
+      background: var(--accent); color: #fff; border: none;
+      border-radius: 10px; padding: 12px 16px;
+      font-size: .84rem; font-weight: 600; cursor: pointer;
+    }
+    .btn.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .btn:active { opacity: .85; }
+    .toast {
+      position: fixed; bottom: calc(80px + var(--safe-bottom)); left: 50%; transform: translateX(-50%);
+      background: var(--green); color: #0a1a12; padding: 10px 18px; border-radius: 99px;
+      font-size: .82rem; font-weight: 600; opacity: 0; transition: opacity .25s; pointer-events: none; z-index: 50;
+    }
+    .toast.show { opacity: 1; }
+    #export-output {
+      width: 100%; min-height: 280px; font-family: ui-monospace, monospace;
+      font-size: .72rem; line-height: 1.45; margin-top: 10px;
+    }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+    .check-row {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+      font-size: .82rem;
+    }
+    .check-row:last-child { border-bottom: none; }
+    .check-row input { margin-top: 4px; accent-color: var(--accent); width: 18px; height: 18px; }
+    .flow {
+      font-family: ui-monospace, monospace; font-size: .72rem;
+      background: var(--surface2); border-radius: 10px; padding: 12px;
+      overflow-x: auto; white-space: pre; color: #a8b4c8; line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Expedition Protocol</h1>
+    <p>Design planner · review on phone · export back to Cursor</p>
+    <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+  </header>
+
+  <main>
+    <!-- OVERVIEW -->
+    <section class="panel active" id="panel-overview">
+      <div class="card">
+        <h2>Core Concept</h2>
+        <p>2D co-op expedition game: clear procedural sites (B), solve coordination puzzles (D), upgrade a shared outpost under rising threat (C). Steam · 2–8 players · flexible session length.</p>
+        <div class="pill-row">
+          <span class="tag b">B — Clear dungeon</span>
+          <span class="tag c">C — Build & defend</span>
+          <span class="tag d">D — Solve together</span>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Session Loop</h2>
+        <div class="flow">Outpost Hub → Prep → Deploy → Explore Rooms
+  → Combat / Puzzle / Rest → Loot → Extract?
+     ↓ yes                          ↓ push deeper
+  Hub upgrades ← Threat meter ← More rooms → Boss</div>
+      </div>
+      <div class="card">
+        <h2>Session Modes</h2>
+        <table>
+          <tr><th>Mode</th><th>Time</th><th>Structure</th></tr>
+          <tr><td>Sortie</td><td>10–20 min</td><td>3–5 rooms, 1 objective, guaranteed extract</td></tr>
+          <tr><td>Expedition</td><td>30–45 min</td><td>Full floor, boss, meaningful loot</td></tr>
+          <tr><td>Campaign night</td><td>60–90+ min</td><td>Multi-floor + hub pressure event mid-run</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h2>Co-op Roles (light)</h2>
+        <ul>
+          <li><strong>Vanguard</strong> — front line, block/taunt</li>
+          <li><strong>Striker</strong> — burst damage</li>
+          <li><strong>Support</strong> — heal, buff, revive</li>
+          <li><strong>Tech</strong> — deployables, hacks, puzzle terminals</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Core Pillars Balance</h2>
+        <p class="decision-label">How much should each pillar dominate v1? <span class="req">tap to rank</span></p>
+        <div id="pillar-balance"></div>
+      </div>
+    </section>
+
+    <!-- ROOMS GDD -->
+    <section class="panel" id="panel-rooms">
+      <div class="card">
+        <h2>1 · Room-by-Room GDD</h2>
+        <p>Pick a first biome direction. Each option includes a full room pool and floor graph.</p>
+      </div>
+
+      <div class="card" id="rooms-option-a">
+        <h2>Option A — Industrial Ruin</h2>
+        <span class="tag">sci-fi</span><span class="tag b">combat-heavy</span>
+        <p>Collapsed factory district. Rust, sparking conduits, sealed bulkheads. Good for Tech puzzles and hazard rooms.</p>
+        <h3>Room pool (10 types)</h3>
+        <table>
+          <tr><th>Room</th><th>Type</th><th>Rules</th></tr>
+          <tr><td>Loading Bay</td><td>Start</td><td>Safe zone, loadout terminal, route choice (2 exits)</td></tr>
+          <tr><td>Worker Pit</td><td>Combat</td><td>2 waves, cover crates, 1 elite scrap-drone</td></tr>
+          <tr><td>Conduit Relay</td><td>Puzzle</td><td>3 switches, 2 players min; adds spawn if &gt;90s</td></tr>
+          <tr><td>Med Cache</td><td>Rest</td><td>Heal 40%, 1 consumable, optional risk door</td></tr>
+          <tr><td>Chemical Flood</td><td>Hazard</td><td>Rising hazard zone; reach 3 valves under timer</td></tr>
+          <tr><td>Security Checkpoint</td><td>Puzzle+Combat</td><td>Tech hacks panel while others hold line</td></tr>
+          <tr><td>Foundry</td><td>Elite</td><td>Mini-boss: Furnace Golem, weak points on cooldown</td></tr>
+          <tr><td>Archive Vault</td><td>Risk</td><td>Optional: harder fight, blueprint loot</td></tr>
+          <tr><td>Bulkhead Maze</td><td>Puzzle</td><td>Doors open in sequence; comms required (symbols/colors split)</td></tr>
+          <tr><td>Core Reactor</td><td>Boss</td><td>3 phases: shields → adds → overload escape window</td></tr>
+        </table>
+        <h3>Floor graph (Expedition)</h3>
+        <div class="flow">Start → [Combat|Rest] → Branch → [Puzzle|Combat]
+  → [Risk?] → Elite OR Skip → Boss → Extract pad (60s timer)</div>
+        <h3>Sortie variant</h3>
+        <p>Start → 2 combat → 1 puzzle → extract (no boss). 8–10 rooms max in pool rotation.</p>
+      </div>
+
+      <div class="card" id="rooms-option-b">
+        <h2>Option B — Crystal Cavern</h2>
+        <span class="tag">fantasy</span><span class="tag d">puzzle-heavy</span>
+        <p>Bioluminescent caves. Light mechanics, resonant crystals, fragile bridges. Stronger pillar D.</p>
+        <h3>Room pool (10 types)</h3>
+        <table>
+          <tr><th>Room</th><th>Type</th><th>Rules</th></tr>
+          <tr><td>Camp Hollow</td><td>Start</td><td>Safe, route vote, crystal map preview (fogged)</td></tr>
+          <tr><td>Swarm Grotto</td><td>Combat</td><td>Many weak enemies; AoE favored</td></tr>
+          <tr><td>Resonance Bridge</td><td>Puzzle</td><td>Weight plates: need 2+ players simultaneously</td></tr>
+          <tr><td>Glow Pool</td><td>Rest</td><td>Regen + reveal next branch type</td></tr>
+          <tr><td>Shard Field</td><td>Hazard</td><td>Dark zones; carry light source, limited fuel</td></tr>
+          <tr><td>Echo Chamber</td><td>Puzzle</td><td>Sound/order puzzle; mics optional, in-game UI fallback</td></tr>
+          <tr><td>Guardian Nest</td><td>Elite</td><td>Crystal Guardian, reflects projectiles</td></tr>
+          <tr><td>Relic Alcove</td><td>Risk</td><td>Statue trial: combat + puzzle hybrid</td></tr>
+          <tr><td>Mirror Split</td><td>Puzzle</td><td>Two paths, info split between squads</td></tr>
+          <tr><td>Heart Geode</td><td>Boss</td><td>Shatter cores in order while arena shrinks</td></tr>
+        </table>
+        <h3>Floor graph</h3>
+        <div class="flow">Start → Rest → [Puzzle|Puzzle|Combat] → Branch
+  → Mandatory puzzle gate → [Risk?] → Boss → Extract</div>
+      </div>
+
+      <div class="card" id="rooms-option-c">
+        <h2>Option C — Overgrown Station (Hybrid)</h2>
+        <span class="tag">sci-fantasy</span><span class="tag b">balanced</span><span class="tag c">hub tie-in</span>
+        <p>Abandoned orbital habitat reclaimed by flora. ties expedition loot directly to hub bio-modules.</p>
+        <h3>Room pool (10 types)</h3>
+        <table>
+          <tr><th>Room</th><th>Type</th><th>Rules</th></tr>
+          <tr><td>Docking Ring</td><td>Start</td><td>Hub shuttle callback, 3-route choice</td></tr>
+          <tr><td>Hydroponics</td><td>Combat+Gather</td><td>Enemies + harvest nodes (hub food resource)</td></tr>
+          <tr><td>Oxygen Garden</td><td>Puzzle</td><td>Pipe routing between 4 players max active</td></tr>
+          <tr><td>Greenhouse Rest</td><td>Rest</td><td>Plant sample = hub upgrade currency</td></tr>
+          <tr><td>Vent Crawl</td><td>Hazard</td><td>Single-file + ambush; split squad optional</td></tr>
+          <tr><td>Quarantine Lab</td><td>Puzzle+Combat</td><td>Specimen containment; hold zones</td></tr>
+          <tr><td>Root Titan</td><td>Elite</td><td>Stationary boss, weak vines across map</td></tr>
+          <tr><td>Seed Vault</td><td>Risk</td><td>Permanent hub unlock on first clear</td></tr>
+          <tr><td>Comms Array</td><td>Puzzle</td><td>Align dishes; reduces hub threat on success</td></tr>
+          <tr><td>Central Arboretum</td><td>Boss</td><td>Phase shifts: heal zone / spore damage / burn phase</td></tr>
+        </table>
+      </div>
+
+      <p class="decision-label">Choose first biome <span class="req">required</span></p>
+      <div id="decision-biome"></div>
+      <p class="decision-label">Room graph preference</p>
+      <div id="decision-room-graph"></div>
+      <p class="decision-label">Notes — rooms & flow</p>
+      <textarea data-note="rooms" placeholder="e.g. love Conduit Relay, cut Chemical Flood for v1…"></textarea>
+    </section>
+
+    <!-- COMBAT SPEC -->
+    <section class="panel" id="panel-combat">
+      <div class="card">
+        <h2>2 · Combat System Spec</h2>
+        <p>Three combat directions. All support 2–8 co-op and host-authoritative netcode.</p>
+      </div>
+
+      <div class="card">
+        <h2>Option A — Dodge-Forward (Hades-like)</h2>
+        <span class="tag b">fast</span><span class="tag">skill expression</span>
+        <h3>Player verbs</h3>
+        <ul>
+          <li>Move + aim attack (8-dir or mouse)</li>
+          <li><strong>Dash</strong> — i-frames 0.2s, stamina cost</li>
+          <li>Primary / secondary weapon, 1 ability, 1 ultimate (cooldown)</li>
+        </ul>
+        <h3>Damage model</h3>
+        <table>
+          <tr><th>Stat</th><th>Base</th></tr>
+          <tr><td>Player HP</td><td>100 (+ gear)</td></tr>
+          <tr><td>Light hit</td><td>8–12</td></tr>
+          <tr><td>Heavy telegraph</td><td>25–35 (1.2s windup)</td></tr>
+          <tr><td>Revive window</td><td>8s downed → dead → spectate</td></tr>
+        </table>
+        <h3>Enemy telegraph language</h3>
+        <ul>
+          <li>Red floor AoE = dodge</li>
+          <li>Enemy flash white = parry window (Vanguard only)</li>
+          <li>Projectile = small tint + travel line</li>
+        </ul>
+        <h3>Example enemies (Industrial)</h3>
+        <p>Scrap Drone (swarm), Arc Sentry (ranged), Crusher (slow heavy), Furnace Golem (elite)</p>
+      </div>
+
+      <div class="card">
+        <h2>Option B — Tactics & Positioning (Alien Swarm-like)</h2>
+        <span class="tag">methodical</span><span class="tag d">squad play</span>
+        <h3>Player verbs</h3>
+        <ul>
+          <li>Move, aim, <strong>hold position</strong> (accuracy bonus)</li>
+          <li>Class gadgets: turret, med beacon, shield wall, scanner</li>
+          <li>Reload + ammo types (AP vs shielded)</li>
+        </ul>
+        <h3>Damage model</h3>
+        <table>
+          <tr><th>Stat</th><th>Base</th></tr>
+          <tr><td>Player HP</td><td>120 (+ armor slots)</td></tr>
+          <tr><td>Chip damage</td><td>5–8 sustained</td></tr>
+          <tr><td>Focus fire bonus</td><td>+15% same target</td></tr>
+          <tr><td>Revive</td><td>12s channel by Support</td></tr>
+        </table>
+        <h3>Telegraph language</h3>
+        <ul>
+          <li>Directional cone overlay = reposition</li>
+          <li>Elite aura color = required damage type</li>
+        </ul>
+        <h3>Example enemies</h3>
+        <p>Grunt horde, Shieldbearer, Spitter (zone deny), Brood anchor (objective kill)</p>
+      </div>
+
+      <div class="card">
+        <h2>Option C — Hybrid Pulse (Recommended middle)</h2>
+        <span class="tag b">balanced</span>
+        <h3>Player verbs</h3>
+        <ul>
+          <li>Move + attack + <strong>1 dodge</strong> (no stamina bar — cooldown only)</li>
+          <li>Class skill + team combo meter (synced ultimates)</li>
+          <li>Interact/revive shares same key, 3s channel</li>
+        </ul>
+        <h3>Damage model</h3>
+        <table>
+          <tr><th>Stat</th><th>Base</th></tr>
+          <tr><td>HP</td><td>100</td></tr>
+          <tr><td>Dodge CD</td><td>2.5s</td></tr>
+          <tr><td>Combo meter</td><td>Fills on coordinated kills (+25% when 2+ roles hit same target)</td></tr>
+          <tr><td>Team wipe</td><td>Lose run loot, keep 50% meta currency</td></tr>
+        </table>
+        <h3>Weapons (starter trio)</h3>
+        <table>
+          <tr><th>Weapon</th><th>Role</th><th>Feel</th></tr>
+          <tr><td>Shock Baton</td><td>Close</td><td>Fast, stun build-up</td></tr>
+          <tr><td>Pulse Carbine</td><td>Mid</td><td>Reliable, weak to armor</td></tr>
+          <tr><td>Arc Launcher</td><td>AoE</td><td>Slow, clears swarms</td></tr>
+        </table>
+      </div>
+
+      <p class="decision-label">Choose combat direction <span class="req">required</span></p>
+      <div id="decision-combat"></div>
+      <p class="decision-label">Camera for combat</p>
+      <div id="decision-camera"></div>
+      <p class="decision-label">Notes — combat feel</p>
+      <textarea data-note="combat" placeholder="e.g. want dodge but not stamina bar…"></textarea>
+    </section>
+
+    <!-- HUB TREE -->
+    <section class="panel" id="panel-hub">
+      <div class="card">
+        <h2>3 · Hub Upgrade Tree</h2>
+        <p>Three outpost fantasies. All use <strong>Threat meter</strong> (rises each expedition; triggers events at 25/50/75/100).</p>
+      </div>
+
+      <div class="card">
+        <h2>Option A — Minimal Outpost (C-lite)</h2>
+        <span class="tag c">low scope v1</span>
+        <p>Single screen hub, 4 module slots, no active defense minigame.</p>
+        <table>
+          <tr><th>Module</th><th>Cost</th><th>Effect</th></tr>
+          <tr><td>Workshop</td><td>200 scrap</td><td>+1 weapon mod slot</td></tr>
+          <tr><td>Med Bay</td><td>150 scrap</td><td>+20% revive speed</td></tr>
+          <tr><td>Sensor Array</td><td>250 scrap</td><td>Reveal 1 room type on map</td></tr>
+          <tr><td>Bulkhead</td><td>300 scrap</td><td>Threat rise −10% per run</td></tr>
+        </table>
+        <p><strong>Threat 100:</strong> next deploy starts with "Emergency Extract" modifier (harder, bonus loot).</p>
+      </div>
+
+      <div class="card">
+        <h2>Option B — Living Base (C-medium)</h2>
+        <span class="tag c">more persistence</span>
+        <p>6 modules, soft degradation, repair tasks between runs.</p>
+        <table>
+          <tr><th>Tier</th><th>Module</th><th>Unlock</th></tr>
+          <tr><td>1</td><td>Power Core</td><td>Enables all other modules</td></tr>
+          <tr><td>1</td><td>Supply Cache</td><td>+starting consumable</td></tr>
+          <tr><td>2</td><td>Fab Bench</td><td>craft mods from expedition drops</td></tr>
+          <tr><td>2</td><td>Shield Emitter</td><td>1 free "threat absorb" per campaign</td></tr>
+          <tr><td>3</td><td>Drone Bay</td><td>AI drone revive (solo/co-op backup)</td></tr>
+          <tr><td>3</td><td>Archive</td><td>meta unlocks: room mutators</td></tr>
+        </table>
+        <p><strong>Degradation:</strong> skip repair → random module offline next run. Repair = 1 short hub interaction or spend scrap.</p>
+        <p><strong>Threat 75+:</strong> "Incursion" — deploy with hub debuff until cleared room in expedition.</p>
+      </div>
+
+      <div class="card">
+        <h2>Option C — Siege Hub (C-heavy, long sessions)</h2>
+        <span class="tag c">campaign nights</span>
+        <p>Base layout with walls/turrets; between-floor sieges in Campaign mode.</p>
+        <table>
+          <tr><th>Resource</th><th>Source</th><th>Use</th></tr>
+          <tr><td>Scrap</td><td>combat rooms</td><td>turrets, walls</td></tr>
+          <tr><td>Samples</td><td>puzzle rooms</td><td>research (passives)</td></tr>
+          <tr><td>Power</td><td>extract quota</td><td>keep lights on (dark hub if low)</td></tr>
+        </table>
+        <p><strong>Siege wave:</strong> 3 min defense, 2–4 players or turrets; failure = lose 1 module tier.</p>
+        <p><strong>Best for:</strong> 60–90 min Campaign nights; higher dev cost.</p>
+      </div>
+
+      <p class="decision-label">Choose hub direction <span class="req">required</span></p>
+      <div id="decision-hub"></div>
+      <p class="decision-label">Threat system intensity</p>
+      <div id="decision-threat"></div>
+      <p class="decision-label">Notes — meta progression</p>
+      <textarea data-note="hub" placeholder="e.g. want Living Base but skip sieges for v1…"></textarea>
+    </section>
+
+    <!-- SCENES -->
+    <section class="panel" id="panel-scenes">
+      <div class="card">
+        <h2>4 · Mockup → Scene Breakdown</h2>
+        <p>Use this to map your visuals to Godot scenes. Attach mockup refs in notes until art exists.</p>
+      </div>
+
+      <div class="card">
+        <h2>Scene tree (target)</h2>
+        <div class="flow">res://scenes/
+├── main_menu/main_menu.tscn
+├── lobby/lobby.tscn
+├── hub/outpost.tscn          ← NEW
+├── expedition/
+│   ├── expedition_root.tscn  ← room loader
+│   ├── rooms/                ← one .tscn per room type
+│   └── boss/                 ← biome bosses
+├── game/player.tscn
+└── ui/                       ← HUD, map, comms overlay</div>
+      </div>
+
+      <div class="card">
+        <h2>Mockup mapping template</h2>
+        <table>
+          <tr><th>Mockup / Screen</th><th>Godot scene</th><th>Key nodes</th><th>Multiplayer</th></tr>
+          <tr><td>Title / main menu</td><td>main_menu.tscn</td><td>MenuStack, SteamStatus</td><td>No</td></tr>
+          <tr><td>Lobby / party</td><td>lobby.tscn</td><td>MemberList, StartButton</td><td>Host RPC start</td></tr>
+          <tr><td>Outpost hub</td><td>hub/outpost.tscn</td><td>ModuleSlots, ThreatMeter</td><td>Host owns upgrades</td></tr>
+          <tr><td>Deploy screen</td><td>hub/deploy.tscn</td><td>BiomeSelect, Loadout</td><td>Vote or host pick</td></tr>
+          <tr><td>Combat room</td><td>rooms/combat_*.tscn</td><td>SpawnPoints, Cover, ExitDoors</td><td>Host spawns enemies</td></tr>
+          <tr><td>Puzzle gate</td><td>rooms/puzzle_*.tscn</td><td>Switches, SyncTimer</td><td>Host owns state</td></tr>
+          <tr><td>Boss arena</td><td>boss/*.tscn</td><td>PhaseController, WeakPoints</td><td>Host phases</td></tr>
+          <tr><td>Extract</td><td>rooms/extract.tscn</td><td>ExtractZone, TimerUI</td><td>All must overlap</td></tr>
+          <tr><td>In-game HUD</td><td>ui/hud.tscn</td><td>HP, downed, minimap</td><td>Per-peer widgets</td></tr>
+          <tr><td>Puzzle comms UI</td><td>ui/comms_overlay.tscn</td><td>SymbolPanel (asym info)</td><td>Role-filtered RPC</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>Art layer checklist (2D HD)</h2>
+        <div id="art-checklist"></div>
+      </div>
+
+      <div class="card">
+        <h2>Open visual decisions</h2>
+        <p class="decision-label">Tone</p>
+        <div id="decision-tone"></div>
+        <p class="decision-label">Camera angle</p>
+        <div id="decision-scene-camera"></div>
+        <p class="decision-label">Mockup links / descriptions</p>
+        <textarea data-note="mockups" placeholder="Paste links or describe: e.g. 'hub looks like mood board X, characters chibi-realistic…'"></textarea>
+        <p class="decision-label">Scene priorities for first vertical slice</p>
+        <div id="decision-scene-priority"></div>
+      </div>
+    </section>
+
+    <!-- OPEN QUESTIONS -->
+    <section class="panel" id="panel-open">
+      <div class="card">
+        <h2>Open Questions</h2>
+        <p>From architecture + design review. Decide when ready.</p>
+        <div id="open-questions"></div>
+      </div>
+      <div class="card">
+        <h2>v1 Scope checklist</h2>
+        <div id="v1-scope"></div>
+      </div>
+    </section>
+
+    <!-- EXPORT -->
+    <section class="panel" id="panel-export">
+      <div class="card">
+        <h2>Export for Cursor</h2>
+        <p>Generates markdown from your decisions + notes. Paste into desktop Cursor chat to continue design or implementation.</p>
+        <div class="btn-row">
+          <button class="btn" id="btn-export">Copy summary</button>
+          <button class="btn secondary" id="btn-download">Download .md</button>
+          <button class="btn secondary" id="btn-reset">Reset all</button>
+        </div>
+        <textarea id="export-output" readonly placeholder="Tap Copy summary…"></textarea>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom" id="nav">
+    <button data-tab="overview" class="active"><span class="icon">◉</span>Overview</button>
+    <button data-tab="rooms"><span class="icon">▣</span>Rooms</button>
+    <button data-tab="combat"><span class="icon">⚔</span>Combat</button>
+    <button data-tab="hub"><span class="icon">⌂</span>Hub</button>
+    <button data-tab="scenes"><span class="icon">▤</span>Scenes</button>
+    <button data-tab="open"><span class="icon">?</span>Open</button>
+    <button data-tab="export"><span class="icon">↑</span>Export</button>
+  </nav>
+
+  <div class="toast" id="toast">Copied!</div>
+
+  <script>
+    const STORAGE_KEY = 'expedition-protocol-planner-v1';
+
+    const DECISIONS = {
+      'pillar-balance': {
+        label: 'Pillar emphasis (pick up to 2 primary)',
+        type: 'multi',
+        max: 2,
+        options: [
+          { id: 'b', title: 'B — Clear dungeon', desc: 'More combat rooms, bosses, loot dopamine' },
+          { id: 'c', title: 'C — Build & defend', desc: 'Hub upgrades, threat, persistence between runs' },
+          { id: 'd', title: 'D — Solve together', desc: 'Puzzle gates, comms, coordination spikes' },
+        ],
+      },
+      biome: {
+        label: 'First biome',
+        type: 'single',
+        options: [
+          { id: 'industrial', title: 'A — Industrial Ruin', desc: 'Sci-fi factory, combat-heavy, Tech puzzles' },
+          { id: 'crystal', title: 'B — Crystal Cavern', desc: 'Bioluminescent caves, puzzle-heavy, light mechanics' },
+          { id: 'overgrown', title: 'C — Overgrown Station', desc: 'Orbital habitat + flora, balanced, hub tie-ins' },
+        ],
+      },
+      'room-graph': {
+        label: 'Room graph style',
+        type: 'single',
+        options: [
+          { id: 'linear', title: 'Mostly linear', desc: '1–2 branches; good for Sortie' },
+          { id: 'branchy', title: 'Branching paths', desc: 'Vote at nodes; replayability' },
+          { id: 'hybrid', title: 'Hybrid', desc: 'Linear act 1, branch act 2, boss finale' },
+        ],
+      },
+      combat: {
+        label: 'Combat system',
+        type: 'single',
+        options: [
+          { id: 'dodge', title: 'A — Dodge-forward', desc: 'Hades-like dash, i-frames, stamina' },
+          { id: 'tactics', title: 'B — Tactics & positioning', desc: 'Cover, gadgets, ammo types' },
+          { id: 'hybrid', title: 'C — Hybrid pulse (recommended)', desc: 'Cooldown dodge, combo meter, revive channel' },
+        ],
+      },
+      camera: {
+        label: 'Combat camera',
+        type: 'single',
+        options: [
+          { id: 'topdown', title: 'Top-down', desc: 'Clean readability for 8 players' },
+          { id: 'isometric', title: 'Slight isometric', desc: 'Depth, prettier, harder collision art' },
+          { id: 'side', title: 'Side-view', desc: 'Platformer feel; different level design' },
+        ],
+      },
+      hub: {
+        label: 'Hub system',
+        type: 'single',
+        options: [
+          { id: 'minimal', title: 'A — Minimal outpost', desc: '4 modules, threat modifier only' },
+          { id: 'living', title: 'B — Living base', desc: '6 modules, degradation, repair loop' },
+          { id: 'siege', title: 'C — Siege hub', desc: 'Turrets, between-floor defense events' },
+        ],
+      },
+      threat: {
+        label: 'Threat intensity',
+        type: 'single',
+        options: [
+          { id: 'low', title: 'Low', desc: 'Flavor only until 100; good for chill co-op' },
+          { id: 'medium', title: 'Medium', desc: 'Debuffs at 50/75; recommended' },
+          { id: 'high', title: 'High', desc: 'Constant pressure + sieges; hardcore' },
+        ],
+      },
+      tone: {
+        label: 'Visual / narrative tone',
+        type: 'single',
+        options: [
+          { id: 'tense', title: 'Tense / survival', desc: 'Limited light, sharp sound design' },
+          { id: 'adventurous', title: 'Adventurous', desc: 'Bright spots, curiosity-driven' },
+          { id: 'arcade', title: 'Arcade action', desc: 'Bold colors, fast feedback' },
+        ],
+      },
+      'scene-camera': {
+        label: 'Scene composition camera',
+        type: 'single',
+        options: [
+          { id: 'topdown', title: 'Top-down', desc: 'Matches combat option A/C' },
+          { id: 'isometric', title: 'Isometric', desc: 'Parallax layers shine' },
+          { id: 'side', title: 'Side-view', desc: 'Tilemap platformer rooms' },
+        ],
+      },
+      'scene-priority': {
+        label: 'Build first (pick 3)',
+        type: 'multi',
+        max: 3,
+        options: [
+          { id: 'combat', title: '1 combat room', desc: 'Validate feel + net sync' },
+          { id: 'puzzle', title: '1 puzzle gate', desc: 'Validate co-op coordination' },
+          { id: 'hub', title: 'Hub shell', desc: 'Upgrade UI + threat meter' },
+          { id: 'boss', title: 'Boss arena', desc: 'Phase test + spectacle' },
+          { id: 'extract', title: 'Extract sequence', desc: 'Timer tension + team wipe rules' },
+        ],
+      },
+    };
+
+    const OPEN_QUESTIONS = [
+      { id: 'q-solo', text: 'Support solo play with AI drone, or co-op only?' },
+      { id: 'q-voice', text: 'Require voice comms for puzzles, or always provide in-game UI fallback?' },
+      { id: 'q-loot', text: 'Shared loot pool vs personal inventory on extract?' },
+      { id: 'q-death', text: 'Permadeath run vs downed-revive (current default: downed)' },
+      { id: 'q-progress', text: 'Host owns meta save only, or sync hub to all party members?' },
+    ];
+
+    const V1_SCOPE = [
+      { id: 's-biome', text: 'One biome, 8–10 room types' },
+      { id: 's-boss', text: 'One boss, two puzzle templates' },
+      { id: 's-hub', text: 'Hub with 4–6 upgrade slots' },
+      { id: 's-modes', text: 'Sortie + Expedition modes' },
+      { id: 's-players', text: 'Balance for 2–4 first, scale to 8' },
+      { id: 's-net', text: 'Host-authoritative, no host migration v1' },
+    ];
+
+    const ART_CHECKLIST = [
+      { id: 'a-parallax', text: 'Parallax background layers (sky, mid, ground)' },
+      { id: 'a-char', text: 'Character sprites + 4-class read silhouettes' },
+      { id: 'a-tile', text: 'Room tilesets or hand-painted room backplates' },
+      { id: 'a-vfx', text: 'Telegraph VFX kit (AoE, projectile, hit flash)' },
+      { id: 'a-ui', text: 'HUD: HP, downed, minimap, threat' },
+      { id: 'a-shader', text: 'Post grade + optional 2D lighting' },
+    ];
+
+    let state = loadState();
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return { decisions: {}, notes: {}, checks: {}, open: {}, scope: {} };
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateProgress();
+      refreshExport();
+    }
+
+    function renderDecision(id, containerId) {
+      const def = DECISIONS[id];
+      const el = document.getElementById(containerId);
+      if (!el || !def) return;
+      el.innerHTML = def.options.map(opt => {
+        const sel = def.type === 'multi'
+          ? (state.decisions[id] || []).includes(opt.id)
+          : state.decisions[id] === opt.id;
+        return `<button type="button" class="option${sel ? ' selected' : ''}" data-decision="${id}" data-option="${opt.id}" data-type="${def.type}">
+          <span class="option-title">${opt.title}</span>
+          <span class="option-desc">${opt.desc}</span>
+        </button>`;
+      }).join('');
+    }
+
+    function renderChecks(items, containerId, stateKey) {
+      const el = document.getElementById(containerId);
+      el.innerHTML = items.map(item => `
+        <label class="check-row">
+          <input type="checkbox" data-check="${stateKey}" data-id="${item.id}" ${state[stateKey][item.id] ? 'checked' : ''} />
+          <span>${item.text}</span>
+        </label>
+      `).join('');
+    }
+
+    function bindDecisions() {
+      document.querySelectorAll('[data-decision]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.decision;
+          const opt = btn.dataset.option;
+          const def = DECISIONS[id];
+          if (def.type === 'multi') {
+            let arr = state.decisions[id] || [];
+            if (arr.includes(opt)) arr = arr.filter(x => x !== opt);
+            else {
+              if (def.max && arr.length >= def.max) arr = arr.slice(1);
+              arr = [...arr, opt];
+            }
+            state.decisions[id] = arr;
+          } else {
+            state.decisions[id] = state.decisions[id] === opt ? null : opt;
+          }
+          saveState();
+          renderAllDecisions();
+        });
+      });
+    }
+
+    function renderAllDecisions() {
+      Object.keys(DECISIONS).forEach(id => {
+        const map = {
+          'pillar-balance': 'pillar-balance',
+          biome: 'decision-biome',
+          'room-graph': 'decision-room-graph',
+          combat: 'decision-combat',
+          camera: 'decision-camera',
+          hub: 'decision-hub',
+          threat: 'decision-threat',
+          tone: 'decision-tone',
+          'scene-camera': 'decision-scene-camera',
+          'scene-priority': 'decision-scene-priority',
+        };
+        if (map[id]) renderDecision(id, map[id]);
+      });
+    }
+
+    function labelFor(decisionId, optionId) {
+      const def = DECISIONS[decisionId];
+      const opt = def?.options.find(o => o.id === optionId);
+      return opt ? opt.title : optionId || '—';
+    }
+
+    function updateProgress() {
+      const required = ['biome', 'combat', 'hub'];
+      const done = required.filter(k => state.decisions[k]).length;
+      const optional = Object.keys(DECISIONS).length;
+      const filled = Object.keys(state.decisions).filter(k => {
+        const v = state.decisions[k];
+        return v && (Array.isArray(v) ? v.length : true);
+      }).length;
+      const notes = Object.values(state.notes).filter(n => n && n.trim()).length;
+      const pct = Math.min(100, Math.round(((done / required.length) * 50) + (filled / optional) * 30 + notes * 4));
+      document.getElementById('progress-bar').style.width = pct + '%';
+    }
+
+    function refreshExport() {
+      const d = state.decisions;
+      const lines = [
+        '# Expedition Protocol — Design Decisions',
+        `_Exported ${new Date().toLocaleString()}_`,
+        '',
+        '## Summary choices',
+        `- **Primary pillars:** ${(d['pillar-balance'] || []).map(x => labelFor('pillar-balance', x)).join(', ') || '—'}`,
+        `- **First biome:** ${labelFor('biome', d.biome)}`,
+        `- **Room graph:** ${labelFor('room-graph', d['room-graph'])}`,
+        `- **Combat system:** ${labelFor('combat', d.combat)}`,
+        `- **Combat camera:** ${labelFor('camera', d.camera)}`,
+        `- **Hub system:** ${labelFor('hub', d.hub)}`,
+        `- **Threat intensity:** ${labelFor('threat', d.threat)}`,
+        `- **Tone:** ${labelFor('tone', d.tone)}`,
+        `- **Scene camera:** ${labelFor('scene-camera', d['scene-camera'])}`,
+        `- **Build first:** ${(d['scene-priority'] || []).map(x => labelFor('scene-priority', x)).join(', ') || '—'}`,
+        '',
+        '## Notes',
+      ];
+      ['rooms', 'combat', 'hub', 'mockups'].forEach(key => {
+        if (state.notes[key]?.trim()) lines.push(`### ${key}`, state.notes[key].trim(), '');
+      });
+      lines.push('## Open questions answered');
+      OPEN_QUESTIONS.forEach(q => {
+        if (state.open[q.id]?.trim()) lines.push(`- **${q.text}**`, `  ${state.open[q.id].trim()}`);
+      });
+      lines.push('', '## v1 scope agreed');
+      V1_SCOPE.forEach(s => {
+        if (state.scope[s.id]) lines.push(`- [x] ${s.text}`);
+      });
+      lines.push('', '## Art checklist done');
+      ART_CHECKLIST.forEach(a => {
+        if (state.checks[a.id]) lines.push(`- [x] ${a.text}`);
+      });
+      lines.push('', '---', '_Paste this into Cursor chat to continue design or implementation._');
+      document.getElementById('export-output').value = lines.join('\n');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    // Nav
+    document.getElementById('nav').addEventListener('click', e => {
+      const btn = e.target.closest('button[data-tab]');
+      if (!btn) return;
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+      btn.classList.add('active');
+    });
+
+    // Notes
+    document.querySelectorAll('[data-note]').forEach(ta => {
+      ta.value = state.notes[ta.dataset.note] || '';
+      ta.addEventListener('input', () => {
+        state.notes[ta.dataset.note] = ta.value;
+        saveState();
+      });
+    });
+
+    // Open questions
+    const oqEl = document.getElementById('open-questions');
+    oqEl.innerHTML = OPEN_QUESTIONS.map(q => `
+      <p style="font-size:.82rem;margin:12px 0 4px;font-weight:600">${q.text}</p>
+      <input type="text" data-open="${q.id}" placeholder="Your answer…" value="${state.open[q.id] || ''}" />
+    `).join('');
+    oqEl.querySelectorAll('[data-open]').forEach(inp => {
+      inp.addEventListener('input', () => {
+        state.open[inp.dataset.open] = inp.value;
+        saveState();
+      });
+    });
+
+    renderChecks(V1_SCOPE, 'v1-scope', 'scope');
+    renderChecks(ART_CHECKLIST, 'art-checklist', 'checks');
+    document.querySelectorAll('[data-check]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        state[cb.dataset.check][cb.dataset.id] = cb.checked;
+        saveState();
+      });
+    });
+
+    document.getElementById('btn-export').addEventListener('click', async () => {
+      refreshExport();
+      const text = document.getElementById('export-output').value;
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('Copied to clipboard!');
+      } catch {
+        document.getElementById('export-output').select();
+        showToast('Select all & copy');
+      }
+    });
+
+    document.getElementById('btn-download').addEventListener('click', () => {
+      refreshExport();
+      const blob = new Blob([document.getElementById('export-output').value], { type: 'text/markdown' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'expedition-protocol-decisions.md';
+      a.click();
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      if (confirm('Clear all decisions and notes?')) {
+        state = { decisions: {}, notes: {}, checks: {}, open: {}, scope: {} };
+        saveState();
+        location.reload();
+      }
+    });
+
+    renderAllDecisions();
+    bindDecisions();
+    updateProgress();
+    refreshExport();
+  </script>
+</body>
+</html>

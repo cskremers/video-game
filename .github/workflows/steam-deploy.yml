@@ -1,0 +1,106 @@
+name: Deploy to Steam Playtest
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+env:
+  GODOT_VERSION: "4.3.2"
+
+jobs:
+  export-windows:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Install Godot
+        run: |
+          wget -q "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q "Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          chmod +x Godot_v${GODOT_VERSION}-stable_linux.x86_64
+          sudo mv Godot_v${GODOT_VERSION}-stable_linux.x86_64 /usr/local/bin/godot
+
+      - name: Export Windows
+        run: |
+          mkdir -p build/windows
+          godot --headless --export-release "Windows Desktop" build/windows/VideoGame.exe
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: build/windows/
+
+  export-macos:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Install Godot
+        run: |
+          curl -sL -o godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_macos.universal.zip"
+          unzip -q godot.zip
+          GODOT_APP=$(ls -d Godot*.app | head -1)
+          sudo ln -sf "$PWD/$GODOT_APP/Contents/MacOS/Godot" /usr/local/bin/godot
+
+      - name: Export macOS
+        run: |
+          mkdir -p build/macos
+          godot --headless --export-release "macOS" build/macos/VideoGame.app
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: build/macos/
+
+  steam-upload:
+    needs: [export-windows, export-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-build
+          path: build/windows
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: macos-build
+          path: build/macos
+
+      - name: Install steamcmd
+        run: |
+          mkdir -p steamcmd
+          cd steamcmd
+          curl -sq "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -
+
+      - name: Prepare Steam VDF
+        env:
+          STEAM_APP_ID: ${{ secrets.STEAM_APP_ID }}
+          STEAM_DEPOT_WIN: ${{ secrets.STEAM_DEPOT_WIN }}
+          STEAM_DEPOT_MAC: ${{ secrets.STEAM_DEPOT_MAC }}
+          BUILD_DESC: ${{ github.ref_name }}
+        run: |
+          sed -e "s/%STEAM_APP_ID%/${STEAM_APP_ID}/g" \
+              -e "s/%STEAM_DEPOT_WIN%/${STEAM_DEPOT_WIN}/g" \
+              -e "s/%STEAM_DEPOT_MAC%/${STEAM_DEPOT_MAC}/g" \
+              -e "s/%BUILD_DESC%/${BUILD_DESC}/g" \
+              steam/app_build.vdf > build/app_build.generated.vdf
+          sed "s/%STEAM_DEPOT_WIN%/${STEAM_DEPOT_WIN}/g" steam/depot_build_windows.vdf > build/depot_windows.vdf
+          sed "s/%STEAM_DEPOT_MAC%/${STEAM_DEPOT_MAC}/g" steam/depot_build_macos.vdf > build/depot_macos.vdf
+
+      - name: Upload to Steam playtest branch
+        env:
+          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+          STEAM_BRANCH: ${{ vars.STEAM_BRANCH || 'playtest' }}
+        run: |
+          ./steamcmd/steamcmd.sh \
+            +login "$STEAM_USERNAME" "$STEAM_PASSWORD" \
+            +run_app_build build/app_build.generated.vdf \
+            +quit
